@@ -91,8 +91,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica N
 
 .benefits{padding:4rem 2rem;background:white}
 .benefits-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2rem;max-width:1000px;margin:0 auto}
-.benefit-card{padding:2rem;background:#f8f9fa;border-radius:12px;text-align:center;transition:all .3s;border:2px solid transparent;opacity:0; transform: translateY(20px);}
-.benefit-card.show{opacity:1; transform: translateY(0);}
+.benefit-card{
+    padding:2rem;background:#f8f9fa;border-radius:12px;text-align:center;
+    transition:all .3s;
+    opacity:0; 
+    transform: translateY(20px);
+}
+.benefit-card.show{
+    opacity:1; 
+    transform: translateY(0);
+}
 .benefit-card:hover{border-color:var(--primary-color);transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,.1)}
 .benefit-icon{font-size:2.5rem;margin-bottom:1rem;display:inline-block}
 .benefit-title{font-size:1.1rem;font-weight:700;color:#333;margin-bottom:.5rem}
@@ -250,8 +258,8 @@ function applyConfig(config){
     document.getElementById('heroBanner').src=config.bannerUrl;
 
     const grid=document.getElementById('benefitsGrid');
-    grid.innerHTML=config.benefits.map(b=>`
-        <div class="benefit-card">
+    grid.innerHTML=config.benefits.map((b,i)=>`
+        <div class="benefit-card" style="transition-delay:${i*0.2}s">
             <div class="benefit-icon">✨</div>
             <div class="benefit-title">${b.title}</div>
             <div class="benefit-text">${b.text}</div>
@@ -300,7 +308,7 @@ function scrollToForm(){
     document.querySelector('.form-section').scrollIntoView({behavior:'smooth'});
 }
 
-// Анимация появления benefit-карт при скролле
+// Анимация появления benefit-карт поочередно при скролле
 function revealBenefits() {
     const cards = document.querySelectorAll('.benefit-card');
     const windowHeight = window.innerHeight;

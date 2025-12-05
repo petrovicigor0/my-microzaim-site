@@ -24,9 +24,18 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica N
     justify-content:flex-end;
     overflow:hidden;
     padding-right:40px;
-    background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+    background: linear-gradient(270deg, #667eea, #764ba2, #ff6b6b, #ff9f43);
+    background-size: 800% 800%;
+    animation: gradientBG 15s ease infinite;
 }
-.hero-banner{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:1;opacity:.8}
+
+@keyframes gradientBG {
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
+}
+
+.hero-banner{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:1;opacity:.2}
 
 .hero-content{
     position:relative;

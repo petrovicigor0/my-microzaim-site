@@ -210,6 +210,7 @@
     .form-group:nth-child(1) { animation: slideInRight 0.5s ease-out 1.2s forwards; }
     .form-group:nth-child(2) { animation: slideInRight 0.5s ease-out 1.4s forwards; }
     .form-group:nth-child(3) { animation: slideInRight 0.5s ease-out 1.6s forwards; }
+    .form-group:nth-child(4) { animation: slideInRight 0.5s ease-out 1.8s forwards; }
     
     .form-label{display:block;margin-bottom:.8rem;font-weight:600;color:rgba(0,0,0,0.9);font-size:0.95rem}
     .form-input{
@@ -365,6 +366,10 @@
                     <input type="text" class="form-input" name="firstName" required placeholder="Введите имя">
                 </div>
                 <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" name="email" required placeholder="example@mail.com">
+                </div>
+                <div class="form-group">
                     <label class="form-label">Телефон</label>
                     <input type="tel" class="form-input" name="phone" required placeholder="+373 XXX XXXXX">
                 </div>
@@ -467,6 +472,7 @@
         const formData={
             lastName:e.target.lastName.value,
             firstName:e.target.firstName.value,
+            email:e.target.email.value,
             phone:e.target.phone.value
         };
         console.log('Заявка:',formData);

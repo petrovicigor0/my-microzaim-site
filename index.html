@@ -4,16 +4,31 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>МикроЗайм - Быстрые займы онлайн</title>
-
 <style>
 :root {
     --primary-color: #667eea;
     --secondary-color: #764ba2;
 }
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;line-height:1.6;color:#333;background:#fff}
+body{
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+    line-height:1.6;
+    color:#fff;
+    background-color: #1a1a2e;
+    position: relative;
+    overflow-x: hidden;
+}
 
-.navbar{display:flex;justify-content:space-between;align-items:center;padding:1rem 2rem;background:white;box-shadow:0 2px 8px rgba(0,0,0,0.08);position:sticky;top:0;z-index:100}
+#particleCanvas{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    z-index:-1;
+}
+
+.navbar{display:flex;justify-content:space-between;align-items:center;padding:1rem 2rem;background:rgba(0,0,0,0.3);backdrop-filter:blur(5px);position:sticky;top:0;z-index:10}
 .logo{font-size:1.5rem;font-weight:700;color:var(--primary-color)}
 
 .hero{
@@ -24,19 +39,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica N
     justify-content:flex-end;
     overflow:hidden;
     padding-right:40px;
-    background:#667eea;
 }
-
-#particleCanvas{
-    position:absolute;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    z-index:0;
-}
-
-.hero-banner{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:0;opacity:.2}
 
 .hero-content{
     position:relative;
@@ -84,11 +87,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica N
 .hero-title{font-size:2.5rem;font-weight:700;margin-bottom:1rem;text-shadow:0 2px 4px rgba(0,0,0,.2)}
 .hero-subtitle{font-size:1.2rem;margin-bottom:2rem;opacity:.95;text-shadow:0 1px 2px rgba(0,0,0,.2)}
 
-.calculator{padding:4rem 2rem;max-width:800px;margin:0 auto;background:#f8f9fa}
+/* Калькулятор */
+.calculator{padding:4rem 2rem;max-width:800px;margin:0 auto;background:rgba(255,255,255,0.05);border-radius:12px;}
 .section-title{font-size:2rem;font-weight:700;margin-bottom:3rem;text-align:center;color:var(--primary-color)}
-.calc-container{background:white;padding:2rem;border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,.1)}
+.calc-container{background:rgba(255,255,255,0.05);padding:2rem;border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,.2)}
 .calc-field{margin-bottom:2rem}
-.calc-label{display:flex;justify-content:space-between;margin-bottom:.8rem;font-weight:600;color:#333}
+.calc-label{display:flex;justify-content:space-between;margin-bottom:.8rem;font-weight:600;color:#fff}
 .calc-value{font-size:1.3rem;color:var(--primary-color);font-weight:700}
 .calc-slider{width:100%;height:6px;border-radius:3px;background:#ddd;outline:none;-webkit-appearance:none;appearance:none;cursor:pointer}
 .calc-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:24px;height:24px;border-radius:50%;background:var(--primary-color);cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.2);transition:all .2s}
@@ -99,10 +103,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica N
 .result-label{font-size:.9rem;opacity:.9;margin-bottom:.5rem}
 .result-value{font-size:2rem;font-weight:700}
 
-.benefits{padding:4rem 2rem;background:white}
+/* Преимущества */
+.benefits{padding:4rem 2rem;background:transparent}
 .benefits-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2rem;max-width:1000px;margin:0 auto}
 .benefit-card{
-    padding:2rem;background:#f8f9fa;border-radius:12px;text-align:center;
+    padding:2rem;background:rgba(255,255,255,0.05);border-radius:12px;text-align:center;
     transition:all .3s;
     opacity:0; 
     transform: translateY(20px);
@@ -113,21 +118,22 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica N
 }
 .benefit-card:hover{border-color:var(--primary-color);transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,.1)}
 .benefit-icon{font-size:2.5rem;margin-bottom:1rem;display:inline-block}
-.benefit-title{font-size:1.1rem;font-weight:700;color:#333;margin-bottom:.5rem}
-.benefit-text{color:#666;font-size:.95rem}
+.benefit-title{font-size:1.1rem;font-weight:700;color:#fff;margin-bottom:.5rem}
+.benefit-text{color:#ddd;font-size:.95rem}
 
-.form-section{padding:4rem 2rem;background:#f8f9fa}
-.form-container{max-width:500px;margin:0 auto;background:white;padding:2rem;border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,.1)}
+/* Форма */
+.form-section{padding:4rem 2rem;background:transparent}
+.form-container{max-width:500px;margin:0 auto;background:rgba(255,255,255,0.05);padding:2rem;border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,.2)}
 .form-group{margin-bottom:1.5rem}
-.form-label{display:block;margin-bottom:.5rem;font-weight:600;color:#333}
-.form-input{width:100%;padding:.8rem;border:2px solid #ddd;border-radius:6px;font-size:1rem;transition:border-color .3s;font-family:inherit}
+.form-label{display:block;margin-bottom:.5rem;font-weight:600;color:#fff}
+.form-input{width:100%;padding:.8rem;border:2px solid #ddd;border-radius:6px;font-size:1rem;transition:border-color .3s;font-family:inherit;background:rgba(255,255,255,0.1);color:#fff}
 .form-input:focus{outline:none;border-color:var(--primary-color)}
 .submit-btn{width:100%;padding:1rem;background:var(--primary-color);color:white;border:none;border-radius:6px;font-size:1.1rem;font-weight:600;cursor:pointer;transition:all .3s}
 .submit-btn:hover{opacity:.9;transform:translateY(-2px)}
 .form-message{padding:1rem;margin-top:1rem;border-radius:6px;text-align:center;display:none}
 .form-message.success{background:#d4edda;color:#155724;display:block}
 
-footer{background:#1a1a1a;color:white;padding:2rem;text-align:center}
+footer{background:rgba(0,0,0,0.3);padding:2rem;text-align:center;color:#fff}
 
 @media(max-width:768px){
     .hero-title{font-size:1.8rem}
@@ -150,13 +156,13 @@ footer{background:#1a1a1a;color:white;padding:2rem;text-align:center}
 </head>
 <body>
 
+<canvas id="particleCanvas"></canvas>
+
 <nav class="navbar">
     <div class="logo">MyZaim</div>
 </nav>
 
 <section class="hero">
-    <canvas id="particleCanvas"></canvas>
-    <img id="heroBanner" class="hero-banner" src="" alt="Banner">
     <div class="hero-content">
         <h1 class="fade-in delay-1" id="heroTitle">Быстрые займы онлайн</h1>
         <p class="fade-in delay-2" id="heroSubtitle">Получите до 100,000 леи за 15 минут</p>
@@ -193,7 +199,7 @@ footer{background:#1a1a1a;color:white;padding:2rem;text-align:center}
     <div class="benefits-grid" id="benefitsGrid"></div>
 </section>
 
-<section class="form-section" id="form">
+<section class="form-section">
     <h2 class="section-title">Подайте заявку</h2>
     <div class="form-container">
         <form id="applicationForm" onsubmit="handleFormSubmit(event)">
@@ -206,12 +212,12 @@ footer{background:#1a1a1a;color:white;padding:2rem;text-align:center}
                 <input type="text" class="form-input" name="firstName" required>
             </div>
             <div class="form-group">
-                <label class="form-label">Телефон</label>
-                <input type="tel" class="form-input" name="phone" required>
+                <label class="form-label">Почта</label>
+                <input type="email" class="form-input" name="email" required>
             </div>
             <div class="form-group">
-                <label class="form-label">E-mail</label>
-                <input type="email" class="form-input" name="email" required>
+                <label class="form-label">Телефон</label>
+                <input type="tel" class="form-input" name="phone" required>
             </div>
             <button type="submit" class="submit-btn">Отправить заявку</button>
             <div class="form-message" id="formMessage">✓ Заявка успешно отправлена!</div>
@@ -224,89 +230,32 @@ footer{background:#1a1a1a;color:white;padding:2rem;text-align:center}
 </footer>
 
 <script>
-let currency = "MDL";
-
-async function loadConfig() {
-    try {
-        const response = await fetch('config.json');
-        if (!response.ok) throw new Error('Config не найден');
-        return await response.json();
-    } catch(e) {
-        console.error(e);
-        return {
-            primaryColor:'#667eea',
-            secondaryColor:'#764ba2',
-            heroTitle:'Быстрые займы онлайн',
-            heroSubtitle:'Получите до 100,000 леи за 15 минут',
-            heroButtonText:'Получить займ',
-            heroButtonColor:'#ff6b6b',
-            bannerUrl:'',
-            currency:"MDL",
-            benefits:[
-                {title:'Быстро', text:'Оформление за 5 минут'},
-                {title:'Удобно', text:'Все онлайн'},
-                {title:'Надежно', text:'Без скрытых комиссий'}
-            ]
-        };
-    }
-}
-
-function applyConfig(config){
-    currency = config.currency || "MDL";
-    const root=document.documentElement;
-    root.style.setProperty('--primary-color',config.primaryColor);
-    root.style.setProperty('--secondary-color',config.secondaryColor);
-
-    document.getElementById('heroTitle').textContent=config.heroTitle;
-    document.getElementById('heroSubtitle').textContent=config.heroSubtitle;
-
-    const heroBtn=document.getElementById('heroBtn');
-    heroBtn.textContent=config.heroButtonText;
-    heroBtn.style.background=config.heroButtonColor;
-    heroBtn.style.color='#fff';
-
-    document.getElementById('heroBanner').src=config.bannerUrl;
-
-    const grid=document.getElementById('benefitsGrid');
-    grid.innerHTML=config.benefits.map((b,i)=>`
-        <div class="benefit-card" style="transition-delay:${i*0.2}s">
-            <div class="benefit-icon">✨</div>
-            <div class="benefit-title">${b.title}</div>
-            <div class="benefit-text">${b.text}</div>
-        </div>
-    `).join('');
-}
-
+// Калькулятор
 const amountSlider=document.getElementById('amountSlider');
 const daysSlider=document.getElementById('daysSlider');
+let currency="MDL";
 
 function updateCalculator(){
     const amount=parseInt(amountSlider.value);
     const days=parseInt(daysSlider.value);
-
     const commission=amount*0.005*days;
     const total=amount+commission;
-
-    document.getElementById('amountValue').textContent =
-        amount.toLocaleString('ru-RU') + " " + currency;
-
-    document.getElementById('daysValue').textContent =
-        days + " дн.";
-
-    document.getElementById('resultAmount').textContent =
-        Math.round(total).toLocaleString('ru-RU') + " " + currency;
+    document.getElementById('amountValue').textContent = amount.toLocaleString('ru-RU') + " " + currency;
+    document.getElementById('daysValue').textContent = days + " дн.";
+    document.getElementById('resultAmount').textContent = Math.round(total).toLocaleString('ru-RU') + " " + currency;
 }
-
 amountSlider.addEventListener('input',updateCalculator);
 daysSlider.addEventListener('input',updateCalculator);
+updateCalculator();
 
+// Форма
 function handleFormSubmit(e){
     e.preventDefault();
     const formData={
         lastName:e.target.lastName.value,
         firstName:e.target.firstName.value,
-        phone:e.target.phone.value,
-        email:e.target.email.value
+        email:e.target.email.value,
+        phone:e.target.phone.value
     };
     console.log('Заявка:',formData);
     document.getElementById('formMessage').classList.add('success');
@@ -314,127 +263,75 @@ function handleFormSubmit(e){
     setTimeout(()=>{document.getElementById('formMessage').classList.remove('success')},3000);
 }
 
-function scrollToForm(){
-    document.querySelector('.form-section').scrollIntoView({behavior:'smooth'});
-}
+function scrollToForm(){document.querySelector('.form-section').scrollIntoView({behavior:'smooth'});}
 
-function revealBenefits() {
-    const cards = document.querySelectorAll('.benefit-card');
-    const windowHeight = window.innerHeight;
-    cards.forEach(card => {
-        const cardTop = card.getBoundingClientRect().top;
-        if(cardTop < windowHeight - 100){
-            card.classList.add('show');
-        }
-    });
-}
+// Преимущества (пример)
+const benefits=[
+    {title:'Быстро', text:'Займы за 15 минут'},
+    {title:'Надежно', text:'Все данные защищены'},
+    {title:'Удобно', text:'Онлайн заявка с любого устройства'}
+];
+const grid=document.getElementById('benefitsGrid');
+grid.innerHTML=benefits.map(b=>`<div class="benefit-card">${b.title}<p>${b.text}</p></div>`).join('');
+document.querySelectorAll('.benefit-card').forEach(el=>el.classList.add('show'));
 
-window.addEventListener('scroll', revealBenefits);
-window.addEventListener('load', () => {
-    revealBenefits();
-});
-
-(async()=>{
-    const config=await loadConfig();
-    applyConfig(config);
-    updateCalculator();
-})();
-
-// Particles with lines
+// Частицы
 const canvas = document.getElementById('particleCanvas');
 const ctx = canvas.getContext('2d');
-let particlesArray = [];
-canvas.width = canvas.offsetWidth;
-canvas.height = canvas.offsetHeight;
+let width = canvas.width = window.innerWidth;
+let height = canvas.height = window.innerHeight;
+let mouse = {x:null,y:null};
+window.addEventListener('mousemove',e=>{mouse.x=e.x;mouse.y=e.y;});
+window.addEventListener('resize',()=>{width=canvas.width=window.innerWidth;height=canvas.height=window.innerHeight;initParticles();});
 
-window.addEventListener('resize', () => {
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
-});
-
-const mouse = {x:null, y:null};
-window.addEventListener('mousemove', function(event){
-    mouse.x = event.x;
-    mouse.y = event.y;
-});
-
-class Particle {
+class Particle{
     constructor(){
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 3 + 1;
-        this.baseX = this.x;
-        this.baseY = this.y;
-        this.density = Math.random() * 30 + 1;
-    }
-    draw(){
-        ctx.fillStyle = 'rgba(255,255,255,0.8)';
-        ctx.beginPath();
-        ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
-        ctx.closePath();
-        ctx.fill();
+        this.x=Math.random()*width;
+        this.y=Math.random()*height;
+        this.size=Math.random()*3+1;
+        this.speedX=Math.random()*1-0.5;
+        this.speedY=Math.random()*1-0.5;
     }
     update(){
-        let dx = mouse.x - this.x;
-        let dy = mouse.y - this.y;
-        let dist = Math.sqrt(dx*dx + dy*dy);
-        let forceDirX = dx / dist;
-        let forceDirY = dy / dist;
-        let maxDistance = 100;
-        let force = (maxDistance - dist)/maxDistance;
-        if(force < 0) force = 0;
-        let directionX = forceDirX * force * this.density;
-        let directionY = forceDirY * force * this.density;
-
-        if(dist < maxDistance){
-            this.x -= directionX;
-            this.y -= directionY;
-        } else {
-            if(this.x !== this.baseX) this.x += (this.baseX - this.x)/10;
-            if(this.y !== this.baseY) this.y += (this.baseY - this.y)/10;
-        }
+        this.x+=this.speedX;
+        this.y+=this.speedY;
+        if(this.x>width||this.x<0) this.speedX*=-1;
+        if(this.y>height||this.y<0) this.speedY*=-1;
+    }
+    draw(){
+        ctx.fillStyle='white';
+        ctx.beginPath();
+        ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
+        ctx.fill();
     }
 }
-
-function initParticles(){
-    particlesArray = [];
-    for(let i=0;i<100;i++){
-        particlesArray.push(new Particle());
-    }
-}
-
+let particlesArray=[];
+function initParticles(){particlesArray=[];for(let i=0;i<100;i++){particlesArray.push(new Particle());}}
 function connectParticles(){
     for(let a=0;a<particlesArray.length;a++){
         for(let b=a;b<particlesArray.length;b++){
-            let dx = particlesArray[a].x - particlesArray[b].x;
-            let dy = particlesArray[a].y - particlesArray[b].y;
-            let distance = Math.sqrt(dx*dx + dy*dy);
-            if(distance < 120){
-                ctx.strokeStyle = `rgba(255,255,255,${1 - distance/120})`;
-                ctx.lineWidth = 1;
+            let dx=particlesArray[a].x-particlesArray[b].x;
+            let dy=particlesArray[a].y-particlesArray[b].y;
+            let dist=Math.sqrt(dx*dx+dy*dy);
+            if(dist<100){
+                ctx.strokeStyle='rgba(255,255,255,'+(1-dist/100)+')';
+                ctx.lineWidth=1;
                 ctx.beginPath();
-                ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
-                ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+                ctx.moveTo(particlesArray[a].x,particlesArray[a].y);
+                ctx.lineTo(particlesArray[b].x,particlesArray[b].y);
                 ctx.stroke();
-                ctx.closePath();
             }
         }
     }
 }
-
 function animateParticles(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    particlesArray.forEach(p => {
-        p.update();
-        p.draw();
-    });
+    ctx.clearRect(0,0,width,height);
+    particlesArray.forEach(p=>{p.update();p.draw();});
     connectParticles();
     requestAnimationFrame(animateParticles);
 }
-
 initParticles();
 animateParticles();
 </script>
-
 </body>
 </html>

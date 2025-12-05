@@ -3,262 +3,295 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>МикроЗайм - Быстрые займы онлайн</title>
+<title>Микрозаймы — быстрые займы онлайн</title>
+
 <style>
-    :root {
-        --primary-color: #667eea;
-        --secondary-color: #764ba2;
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #0e0e11; /* Новый фон */
+        color: #fff;
+        overflow-x: hidden;
+        position: relative;
     }
-    *{margin:0;padding:0;box-sizing:border-box}
-    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;line-height:1.6;color:#333;background:#fff}
-    .navbar{display:flex;justify-content:space-between;align-items:center;padding:1rem 2rem;background:white;box-shadow:0 2px 8px rgba(0,0,0,0.08);position:sticky;top:0;z-index:100}
-    .logo{font-size:1.5rem;font-weight:700;color:var(--primary-color)}
-    .admin-btn{padding:.5rem 1rem;background:var(--secondary-color);color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:.9rem;transition:opacity .3s}
-    .admin-btn:hover{opacity:.9}
-    .hero{position:relative;min-height:400px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%)}
-    .hero-banner{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:1;opacity:.8}
-    .hero-content{position:relative;z-index:2;text-align:center;color:white;padding:2rem;max-width:600px; opacity:0; transform: translateY(20px); transition: all 1s ease-out;}
-    .hero-content.show{opacity:1; transform: translateY(0);}
-    .hero-title{font-size:2.5rem;font-weight:700;margin-bottom:1rem;text-shadow:0 2px 4px rgba(0,0,0,.2)}
-    .hero-subtitle{font-size:1.2rem;margin-bottom:2rem;opacity:.95;text-shadow:0 1px 2px rgba(0,0,0,.2)}
-    .hero-btn{padding:1rem 2.5rem;font-size:1rem;font-weight:600;border:none;border-radius:8px;cursor:pointer;transition:all .8s ease;box-shadow:0 4px 12px rgba(0,0,0,.15); opacity:0; transform: translateY(20px);}
-    .hero-btn.show{opacity:1; transform: translateY(0);}
-    .calculator{padding:4rem 2rem;max-width:800px;margin:0 auto;background:#f8f9fa}
-    .section-title{font-size:2rem;font-weight:700;margin-bottom:3rem;text-align:center;color:var(--primary-color); opacity:0; transform: translateY(20px); transition: all 0.8s ease-out;}
-    .section-title.show{opacity:1; transform: translateY(0);}
-    .calc-container{background:white;padding:2rem;border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,.1); opacity:0; transform: translateY(20px); transition: all 0.8s ease-out;}
-    .calc-container.show{opacity:1; transform: translateY(0);}
-    .calc-field{margin-bottom:2rem}
-    .calc-label{display:flex;justify-content:space-between;margin-bottom:.8rem;font-weight:600;color:#333}
-    .calc-value{font-size:1.3rem;color:var(--primary-color);font-weight:700}
-    .calc-slider{width:100%;height:6px;border-radius:3px;background:#ddd;outline:none;-webkit-appearance:none;appearance:none;cursor:pointer}
-    .calc-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:24px;height:24px;border-radius:50%;background:var(--primary-color);cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.2);transition:all .2s}
-    .calc-slider::-webkit-slider-thumb:hover{transform:scale(1.2)}
-    .calc-slider::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:var(--primary-color);cursor:pointer;border:none;box-shadow:0 2px 8px rgba(0,0,0,.2);transition:all .2s}
-    .calc-slider::-moz-range-thumb:hover{transform:scale(1.2)}
-    .calc-result{margin-top:2rem;padding:1.5rem;background:linear-gradient(135deg,var(--primary-color) 0%,var(--secondary-color) 100%);color:white;border-radius:8px;text-align:center}
-    .result-label{font-size:.9rem;opacity:.9;margin-bottom:.5rem}
-    .result-value{font-size:2rem;font-weight:700}
-    .benefits{padding:4rem 2rem;background:white}
-    .benefits-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2rem;max-width:1000px;margin:0 auto}
-    .benefit-card{padding:2rem;background:#f8f9fa;border-radius:12px;text-align:center;transition:all .5s;opacity:0; transform: translateY(20px);}
-    .benefit-card.show{opacity:1; transform: translateY(0);}
-    .benefit-card:hover{border-color:var(--primary-color);transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,.1)}
-    .benefit-icon{font-size:2.5rem;margin-bottom:1rem;display:inline-block}
-    .benefit-title{font-size:1.1rem;font-weight:700;color:#333;margin-bottom:.5rem}
-    .benefit-text{color:#666;font-size:.95rem}
-    .form-section{padding:4rem 2rem;background:#f8f9fa}
-    .form-container{max-width:500px;margin:0 auto;background:white;padding:2rem;border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,.1);opacity:0; transform: translateY(20px); transition: all 0.8s ease-out;}
-    .form-container.show{opacity:1; transform: translateY(0);}
-    .form-group{margin-bottom:1.5rem}
-    .form-label{display:block;margin-bottom:.5rem;font-weight:600;color:#333}
-    .form-input{width:100%;padding:.8rem;border:2px solid #ddd;border-radius:6px;font-size:1rem;transition:border-color .3s;font-family:inherit}
-    .form-input:focus{outline:none;border-color:var(--primary-color)}
-    .submit-btn{width:100%;padding:1rem;background:var(--primary-color);color:white;border:none;border-radius:6px;font-size:1.1rem;font-weight:600;cursor:pointer;transition:all .3s}
-    .submit-btn:hover{opacity:.9;transform:translateY(-2px)}
-    .form-message{padding:1rem;margin-top:1rem;border-radius:6px;text-align:center;display:none}
-    .form-message.success{background:#d4edda;color:#155724;display:block}
-    footer{background:#1a1a1a;color:white;padding:2rem;text-align:center}
-    @media(max-width:768px){.hero-title{font-size:1.8rem}.hero-subtitle{font-size:1rem}.section-title{font-size:1.5rem}.hero-btn{padding:.8rem 2rem;font-size:.95rem}.navbar{padding:1rem}.logo{font-size:1.2rem}}
-    @media(max-width:480px){.hero{min-height:300px}.hero-title{font-size:1.5rem}.hero-subtitle{font-size:.9rem}.calc-container{padding:1.5rem}.form-container{padding:1.5rem}}
+
+    /* ---------- CANVAS ДЛЯ ЧАСТИЦ ---------- */
+    #particles {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+    }
+
+    /* ---------- HERO-БЛОК ---------- */
+    .hero {
+        text-align: center;
+        padding: 100px 20px;
+    }
+
+    .hero h1 {
+        font-size: 38px;
+        margin-bottom: 20px;
+    }
+
+    .hero p {
+        font-size: 18px;
+        margin-bottom: 40px;
+    }
+
+    .hero-btn {
+        background: #ffcc00;
+        color: #000;
+        padding: 12px 24px;
+        border-radius: 8px;
+        display: inline-block;
+        cursor: pointer;
+        font-weight: bold;
+
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.8s ease-out;
+    }
+    .hero-btn.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* ---------- АНИМАЦИЯ ПОЯВЛЕНИЯ ---------- */
+    .fade-in {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.8s ease-out;
+    }
+    .fade-in.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* ---------- БЛОК ПРЕИМУЩЕСТВ ---------- */
+    .benefits {
+        display: flex;
+        gap: 20px;
+        padding: 40px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .benefit-card {
+        background: #1b1b22;
+        padding: 20px;
+        border-radius: 12px;
+        width: 260px;
+        text-align: center;
+        transition: all 0.5s ease;
+    }
+
+    .benefit-card:hover {
+        transform: translateY(-8px) scale(1.05);
+        background: #24242c;
+    }
+
+    /* ---------- КАЛЬКУЛЯТОР ---------- */
+    .calc-container {
+        background: #1a1a1f;
+        padding: 20px;
+        border-radius: 12px;
+        margin: 40px auto;
+        width: 90%;
+        max-width: 450px;
+    }
+
+    .calc-container input, .calc-container select {
+        width: 100%;
+        padding: 12px;
+        border-radius: 8px;
+        border: none;
+        margin-top: 10px;
+        background: #2a2a31;
+        color: #fff;
+    }
+
+    .calc-btn {
+        margin-top: 20px;
+        width: 100%;
+        padding: 12px;
+        background: #ffcc00;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+        color: #000;
+    }
+
+    /* ---------- ФОРМА ЗАЯВКИ ---------- */
+    .form-container {
+        background: #1a1a1f;
+        padding: 20px;
+        border-radius: 12px;
+        margin: 40px auto;
+        width: 90%;
+        max-width: 450px;
+    }
+
+    .form-container input {
+        width: 100%;
+        padding: 12px;
+        border-radius: 8px;
+        border: none;
+        background: #2a2a31;
+        margin-top: 10px;
+        color: #fff;
+    }
+
+    .submit-btn {
+        margin-top: 20px;
+        width: 100%;
+        padding: 12px;
+        background: #ffcc00;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+        color: #000;
+    }
+
 </style>
 </head>
 <body>
-<nav class="navbar">
-    <div class="logo">MyZaim</div>
-    <button class="admin-btn" onclick="goToAdmin()">⚙️ Админ-панель</button>
-</nav>
 
-<section class="hero">
-    <img id="heroBanner" class="hero-banner" src="" alt="Banner">
-    <div class="hero-content" id="heroContent">
-        <h1 class="hero-title" id="heroTitle"></h1>
-        <p class="hero-subtitle" id="heroSubtitle"></p>
-        <button class="hero-btn" id="heroBtn" onclick="scrollToForm()"></button>
-    </div>
-</section>
+<canvas id="particles"></canvas>
 
-<section class="calculator">
-    <h2 class="section-title">Рассчитайте займ</h2>
-    <div class="calc-container">
-        <div class="calc-field">
-            <div class="calc-label">
-                <span>Сумма займа</span>
-                <span class="calc-value" id="amountValue">10,000</span>
-            </div>
-            <input type="range" id="amountSlider" class="calc-slider" min="1000" max="100000" value="10000" step="1000">
-        </div>
-        <div class="calc-field">
-            <div class="calc-label">
-                <span>Срок (дни)</span>
-                <span class="calc-value" id="daysValue">30 дн.</span>
-            </div>
-            <input type="range" id="daysSlider" class="calc-slider" min="1" max="365" value="30" step="1">
-        </div>
-        <div class="calc-result">
-            <div class="result-label">К возврату</div>
-            <div class="result-value" id="resultAmount">10,150</div>
-        </div>
-    </div>
-</section>
+<div class="hero fade-in">
+    <h1>Микрозаймы онлайн</h1>
+    <p>Получите быстрый займ на карту за 5 минут.</p>
+    <div class="hero-btn" id="heroBtn">Оформить заявку</div>
+</div>
 
-<section class="benefits">
-    <h2 class="section-title">Наши преимущества</h2>
-    <div class="benefits-grid" id="benefitsGrid"></div>
-</section>
+<div class="benefits">
+    <div class="benefit-card fade-in">⚡ Быстрое решение</div>
+    <div class="benefit-card fade-in">💳 Мгновенное получение</div>
+    <div class="benefit-card fade-in">📞 Без звонков</div>
+</div>
 
-<section class="form-section">
-    <h2 class="section-title">Подайте заявку</h2>
-    <div class="form-container">
-        <form id="applicationForm" onsubmit="handleFormSubmit(event)">
-            <div class="form-group">
-                <label class="form-label">Фамилия</label>
-                <input type="text" class="form-input" name="lastName" required>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Имя</label>
-                <input type="text" class="form-input" name="firstName" required>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Телефон</label>
-                <input type="tel" class="form-input" name="phone" required>
-            </div>
-            <button type="submit" class="submit-btn">Отправить заявку</button>
-            <div class="form-message" id="formMessage">✓ Заявка успешно отправлена!</div>
-        </form>
-    </div>
-</section>
+<div class="calc-container fade-in">
+    <h3>Калькулятор займа</h3>
+    <label>Сумма</label>
+    <input type="number" placeholder="Введите сумму">
 
-<footer>
-    <p>&copy; 2025 MyZaim. Все права защищены.</p>
-</footer>
+    <label>Срок</label>
+    <select>
+        <option>7 дней</option>
+        <option>14 дней</option>
+        <option>30 дней</option>
+    </select>
+
+    <button class="calc-btn">Рассчитать</button>
+</div>
+
+<div class="form-container fade-in">
+    <h3>Оформить заявку</h3>
+    <input type="text" placeholder="Ваше имя">
+    <input type="text" placeholder="Номер телефона">
+    <input type="text" placeholder="Сумма">
+    <button class="submit-btn">Отправить</button>
+</div>
 
 <script>
-let currency = "MDL"; // дефолт
-
-async function loadConfig() {
-    try {
-        const response = await fetch('config.json');
-        if (!response.ok) throw new Error('Config не найден');
-        return await response.json();
-    } catch(e) {
-        console.error(e);
-        return { 
-            primaryColor:'#667eea',
-            secondaryColor:'#764ba2',
-            heroTitle:'Быстрые займы онлайн',
-            heroSubtitle:'Получите до 100,000',
-            heroButtonText:'Получить займ',
-            heroButtonColor:'#ff6b6b',
-            bannerUrl:'',
-            currency:"MDL",
-            benefits:[]
-        };
-    }
-}
-
-function applyConfig(config){
-    currency = config.currency || "MDL";
-
-    const root=document.documentElement;
-    root.style.setProperty('--primary-color',config.primaryColor);
-    root.style.setProperty('--secondary-color',config.secondaryColor);
-
-    document.getElementById('heroTitle').textContent=config.heroTitle;
-    document.getElementById('heroSubtitle').textContent=config.heroSubtitle;
-
-    const heroBtn=document.getElementById('heroBtn');
-    heroBtn.textContent=config.heroButtonText;
-    heroBtn.style.background=config.heroButtonColor;
-    heroBtn.style.color='#fff';
-
-    document.getElementById('heroBanner').src=config.bannerUrl;
-
-    const grid=document.getElementById('benefitsGrid');
-    grid.innerHTML=config.benefits.map(b=>`
-        <div class="benefit-card">
-            <div class="benefit-icon">✨</div>
-            <div class="benefit-title">${b.title}</div>
-            <div class="benefit-text">${b.text}</div>
-        </div>
-    `).join('');
-}
-
-const amountSlider=document.getElementById('amountSlider');
-const daysSlider=document.getElementById('daysSlider');
-
-function updateCalculator(){
-    const amount=parseInt(amountSlider.value);
-    const days=parseInt(daysSlider.value);
-
-    const commission=amount*0.005*days;
-    const total=amount+commission;
-
-    document.getElementById('amountValue').textContent =
-        amount.toLocaleString('ru-RU') + " " + currency;
-
-    document.getElementById('daysValue').textContent =
-        days + " дн.";
-
-    document.getElementById('resultAmount').textContent =
-        Math.round(total).toLocaleString('ru-RU') + " " + currency;
-}
-
-amountSlider.addEventListener('input',updateCalculator);
-daysSlider.addEventListener('input',updateCalculator);
-
-function handleFormSubmit(e){
-    e.preventDefault();
-    const formData={
-        lastName:e.target.lastName.value,
-        firstName:e.target.firstName.value,
-        phone:e.target.phone.value
-    };
-    console.log('Заявка:',formData);
-    document.getElementById('formMessage').classList.add('success');
-    e.target.reset();
-    setTimeout(()=>{document.getElementById('formMessage').classList.remove('success')},3000);
-}
-
-function goToAdmin(){ alert('Админ-панель пока не готова'); }
-function scrollToForm(){ document.querySelector('.form-section').scrollIntoView({behavior:'smooth'}); }
-
-// Анимация появления блоков при скролле
+/* ---------- Анимация появления при скролле ---------- */
 function animateOnScroll() {
-    document.querySelectorAll('.section-title, .calc-container, .form-container, .benefit-card').forEach(el=>{
-        const windowBottom = window.innerHeight + window.scrollY;
-        if (windowBottom > el.offsetTop + 100) el.classList.add('show');
+    const elements = document.querySelectorAll('.fade-in');
+    const windowBottom = window.innerHeight + window.scrollY;
+
+    elements.forEach(el => {
+        if (windowBottom > el.offsetTop + 100) {
+            el.classList.add('show');
+        }
     });
 }
 
-// Плавное появление hero-content и кнопки
+window.addEventListener('scroll', animateOnScroll);
 window.addEventListener('load', () => {
-    document.getElementById('heroContent').classList.add('show');
     document.getElementById('heroBtn').classList.add('show');
     animateOnScroll();
 });
 
-window.addEventListener('scroll', animateOnScroll);
+/* ---------- ЧАСТИЦЫ С ЛИНИЯМИ ---------- */
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
 
-(async()=>{
-    const config=await loadConfig();
-    applyConfig(config);
-    updateCalculator();
-})();
-</script>
+canvas.width = innerWidth;
+canvas.height = innerHeight;
 
-<!--Start of Tawk.to Script-->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/692d4171b93a681983f687e4/1jbccf8v1';
-s1.charset='UTF-8'; s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
+let particles = [];
+
+class Particle {
+    constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.vx = (Math.random() - 0.5) * 0.7;
+        this.vy = (Math.random() - 0.5) * 0.7;
+        this.size = 2;
+    }
+
+    draw() {
+        ctx.fillStyle = "#ffffff55";
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+    }
+
+    update() {
+        this.x += this.vx;
+        this.y += this.vy;
+
+        if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+    }
+}
+
+function initParticles() {
+    particles = [];
+    for (let i = 0; i < 70; i++) particles.push(new Particle());
+}
+
+function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    particles.forEach(p => {
+        p.update();
+        p.draw();
+    });
+
+    for (let i = 0; i < particles.length; i++) {
+        for (let j = i; j < particles.length; j++) {
+            let dx = particles[i].x - particles[j].x;
+            let dy = particles[i].y - particles[j].y;
+            let dist = Math.sqrt(dx * dx + dy * dy);
+
+            if (dist < 120) {
+                ctx.strokeStyle = "#ffffff22";
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(particles[i].x, particles[i].y);
+                ctx.lineTo(particles[j].x, particles[j].y);
+                ctx.stroke();
+            }
+        }
+    }
+
+    requestAnimationFrame(animate);
+}
+
+initParticles();
+animate();
+
+window.addEventListener('resize', () => {
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
+    initParticles();
+});
 </script>
-<!--End of Tawk.to Script-->
 
 </body>
 </html>

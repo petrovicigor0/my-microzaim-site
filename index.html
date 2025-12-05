@@ -24,18 +24,19 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica N
     justify-content:flex-end;
     overflow:hidden;
     padding-right:40px;
-    background: linear-gradient(270deg, #667eea, #764ba2, #ff6b6b, #ff9f43);
-    background-size: 800% 800%;
-    animation: gradientBG 15s ease infinite;
+    background:#667eea;
 }
 
-@keyframes gradientBG {
-    0%{background-position:0% 50%;}
-    50%{background-position:100% 50%;}
-    100%{background-position:0% 50%;}
+#particleCanvas{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    z-index:0;
 }
 
-.hero-banner{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:1;opacity:.2}
+.hero-banner{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:0;opacity:.2}
 
 .hero-content{
     position:relative;
@@ -154,6 +155,7 @@ footer{background:#1a1a1a;color:white;padding:2rem;text-align:center}
 </nav>
 
 <section class="hero">
+    <canvas id="particleCanvas"></canvas>
     <img id="heroBanner" class="hero-banner" src="" alt="Banner">
     <div class="hero-content">
         <h1 class="fade-in delay-1" id="heroTitle">Быстрые займы онлайн</h1>
@@ -251,7 +253,6 @@ async function loadConfig() {
 
 function applyConfig(config){
     currency = config.currency || "MDL";
-
     const root=document.documentElement;
     root.style.setProperty('--primary-color',config.primaryColor);
     root.style.setProperty('--secondary-color',config.secondaryColor);
@@ -317,7 +318,6 @@ function scrollToForm(){
     document.querySelector('.form-section').scrollIntoView({behavior:'smooth'});
 }
 
-// Анимация появления benefit-карт поочередно при скролле
 function revealBenefits() {
     const cards = document.querySelectorAll('.benefit-card');
     const windowHeight = window.innerHeight;
@@ -339,6 +339,81 @@ window.addEventListener('load', () => {
     applyConfig(config);
     updateCalculator();
 })();
+
+// Particles
+const canvas = document.getElementById('particleCanvas');
+const ctx = canvas.getContext('2d');
+let particlesArray = [];
+canvas.width = canvas.offsetWidth;
+canvas.height = canvas.offsetHeight;
+
+window.addEventListener('resize', () => {
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+});
+
+const mouse = {x:null, y:null};
+window.addEventListener('mousemove', function(event){
+    mouse.x = event.x;
+    mouse.y = event.y;
+});
+
+class Particle {
+    constructor(){
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 3 + 1;
+        this.baseX = this.x;
+        this.baseY = this.y;
+        this.density = Math.random() * 30 + 1;
+    }
+    draw(){
+        ctx.fillStyle = 'rgba(255,255,255,0.8)';
+        ctx.beginPath();
+        ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
+        ctx.closePath();
+        ctx.fill();
+    }
+    update(){
+        let dx = mouse.x - this.x;
+        let dy = mouse.y - this.y;
+        let dist = Math.sqrt(dx*dx + dy*dy);
+        let forceDirX = dx / dist;
+        let forceDirY = dy / dist;
+        let maxDistance = 100;
+        let force = (maxDistance - dist)/maxDistance;
+        if(force < 0) force = 0;
+        let directionX = forceDirX * force * this.density;
+        let directionY = forceDirY * force * this.density;
+
+        if(dist < maxDistance){
+            this.x -= directionX;
+            this.y -= directionY;
+        } else {
+            if(this.x !== this.baseX) this.x += (this.baseX - this.x)/10;
+            if(this.y !== this.baseY) this.y += (this.baseY - this.y)/10;
+        }
+    }
+}
+
+function initParticles(){
+    particlesArray = [];
+    for(let i=0;i<100;i++){
+        particlesArray.push(new Particle());
+    }
+}
+
+function animateParticles(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    particlesArray.forEach(p => {
+        p.update();
+        p.draw();
+    });
+    requestAnimationFrame(animateParticles);
+}
+
+initParticles();
+animateParticles();
 </script>
 
 </body>

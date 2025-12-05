@@ -5,173 +5,76 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>МикроЗайм - Быстрые займы онлайн</title>
 <style>
-:root {
-    --primary-color: #667eea;
-    --secondary-color: #764ba2;
-}
-*{margin:0;padding:0;box-sizing:border-box}
-body{
-    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
-    line-height:1.6;
-    color:#fff;
-    background-color: #1a1a2e;
-    position: relative;
-    overflow-x: hidden;
-}
-
-/* Канвас частиц на весь фон */
-#particleCanvas{
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    z-index:-1;
-}
-
-/* Навбар */
-.navbar{display:flex;justify-content:space-between;align-items:center;padding:1rem 2rem;background:rgba(0,0,0,0.3);backdrop-filter:blur(5px);position:sticky;top:0;z-index:10}
-.logo{font-size:1.5rem;font-weight:700;color:var(--primary-color)}
-
-/* Hero */
-.hero{
-    position:relative;
-    min-height:400px;
-    display:flex;
-    align-items:center;
-    justify-content:flex-end;
-    overflow:hidden;
-    padding-right:40px;
-}
-.hero-content{
-    position:relative;
-    z-index:2;
-    color:white;
-    padding:2rem;
-    max-width:600px;
-    display:flex;
-    flex-direction:column;
-    align-items:flex-end;
-    text-align:right;
-}
-
-/* Появление текста */
-.fade-in {
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeInUp 1s ease forwards;
-}
-.delay-1 { animation-delay: 0.2s; }
-.delay-2 { animation-delay: 0.4s; }
-.delay-3 { animation-delay: 0.6s; }
-
-@keyframes fadeInUp {
-    to {
-        opacity: 1;
-        transform: translateY(0);
+    :root {
+        --primary-color: #667eea;
+        --secondary-color: #764ba2;
     }
-}
-
-/* Кнопка */
-.hero-btn{
-    padding:1rem 2.5rem;
-    font-size:1rem;
-    font-weight:600;
-    border:none;
-    border-radius:8px;
-    cursor:pointer;
-    transition:all .3s;
-    box-shadow:0 4px 12px rgba(0,0,0,.15);
-}
-.hero-btn:hover{
-    transform:translateY(-5px) scale(1.05);
-    box-shadow:0 8px 20px rgba(0,0,0,.25);
-}
-
-/* Заголовки hero */
-.hero-title{font-size:2.5rem;font-weight:700;margin-bottom:1rem;text-shadow:0 2px 4px rgba(0,0,0,.2)}
-.hero-subtitle{font-size:1.2rem;margin-bottom:2rem;opacity:.95;text-shadow:0 1px 2px rgba(0,0,0,.2)}
-
-/* Калькулятор */
-.calculator{padding:4rem 2rem;max-width:800px;margin:0 auto;background:rgba(255,255,255,0.05);border-radius:12px;}
-.section-title{font-size:2rem;font-weight:700;margin-bottom:3rem;text-align:center;color:var(--primary-color)}
-.calc-container{background:rgba(255,255,255,0.05);padding:2rem;border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,.2)}
-.calc-field{margin-bottom:2rem}
-.calc-label{display:flex;justify-content:space-between;margin-bottom:.8rem;font-weight:600;color:#fff}
-.calc-value{font-size:1.3rem;color:var(--primary-color);font-weight:700}
-.calc-slider{width:100%;height:6px;border-radius:3px;background:#ddd;outline:none;-webkit-appearance:none;appearance:none;cursor:pointer}
-.calc-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:24px;height:24px;border-radius:50%;background:var(--primary-color);cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.2);transition:all .2s}
-.calc-slider::-webkit-slider-thumb:hover{transform:scale(1.2)}
-.calc-slider::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:var(--primary-color);cursor:pointer;border:none;box-shadow:0 2px 8px rgba(0,0,0,.2);transition:all .2s}
-.calc-slider::-moz-range-thumb:hover{transform:scale(1.2)}
-.calc-result{margin-top:2rem;padding:1.5rem;background:linear-gradient(135deg,var(--primary-color) 0%,var(--secondary-color) 100%);color:white;border-radius:8px;text-align:center}
-.result-label{font-size:.9rem;opacity:.9;margin-bottom:.5rem}
-.result-value{font-size:2rem;font-weight:700}
-
-/* Преимущества */
-.benefits{padding:4rem 2rem;background:transparent}
-.benefits-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2rem;max-width:1000px;margin:0 auto}
-.benefit-card{
-    padding:2rem;background:rgba(255,255,255,0.05);border-radius:12px;text-align:center;
-    transition:all .3s;
-    opacity:0; 
-    transform: translateY(20px);
-}
-.benefit-card.show{
-    opacity:1; 
-    transform: translateY(0);
-}
-.benefit-card:hover{border-color:var(--primary-color);transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,.1)}
-.benefit-icon{font-size:2.5rem;margin-bottom:1rem;display:inline-block}
-.benefit-title{font-size:1.1rem;font-weight:700;color:#fff;margin-bottom:.5rem}
-.benefit-text{color:#ddd;font-size:.95rem}
-
-/* Форма */
-.form-section{padding:4rem 2rem;background:transparent}
-.form-container{max-width:500px;margin:0 auto;background:rgba(255,255,255,0.05);padding:2rem;border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,.2)}
-.form-group{margin-bottom:1.5rem}
-.form-label{display:block;margin-bottom:.5rem;font-weight:600;color:#fff}
-.form-input{width:100%;padding:.8rem;border:2px solid #ddd;border-radius:6px;font-size:1rem;transition:border-color .3s;font-family:inherit;background:rgba(255,255,255,0.1);color:#fff}
-.form-input:focus{outline:none;border-color:var(--primary-color)}
-.submit-btn{width:100%;padding:1rem;background:var(--primary-color);color:white;border:none;border-radius:6px;font-size:1.1rem;font-weight:600;cursor:pointer;transition:all .3s}
-.submit-btn:hover{opacity:.9;transform:translateY(-2px)}
-.form-message{padding:1rem;margin-top:1rem;border-radius:6px;text-align:center;display:none}
-.form-message.success{background:#d4edda;color:#155724;display:block}
-
-footer{background:rgba(0,0,0,0.3);padding:2rem;text-align:center;color:#fff}
-
-@media(max-width:768px){
-    .hero-title{font-size:1.8rem}
-    .hero-subtitle{font-size:1rem}
-    .section-title{font-size:1.5rem}
-    .hero-btn{padding:.8rem 2rem;font-size:.95rem}
-    .navbar{padding:1rem}
-    .logo{font-size:1.2rem}
-    .hero-content{align-items:center;text-align:center;padding-right:0}
-}
-
-@media(max-width:480px){
-    .hero{min-height:300px}
-    .hero-title{font-size:1.5rem}
-    .hero-subtitle{font-size:.9rem}
-    .calc-container{padding:1.5rem}
-    .form-container{padding:1.5rem}
-}
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;line-height:1.6;color:#333;background:#fff}
+    .navbar{display:flex;justify-content:space-between;align-items:center;padding:1rem 2rem;background:white;box-shadow:0 2px 8px rgba(0,0,0,0.08);position:sticky;top:0;z-index:100}
+    .logo{font-size:1.5rem;font-weight:700;color:var(--primary-color)}
+    .admin-btn{padding:.5rem 1rem;background:var(--secondary-color);color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:.9rem;transition:opacity .3s}
+    .admin-btn:hover{opacity:.9}
+    .hero{position:relative;min-height:400px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%)}
+    .hero-banner{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:1;opacity:.8}
+    .hero-content{position:relative;z-index:2;text-align:center;color:white;padding:2rem;max-width:600px; opacity:0; transform: translateY(20px); transition: all 1s ease-out;}
+    .hero-content.show{opacity:1; transform: translateY(0);}
+    .hero-title{font-size:2.5rem;font-weight:700;margin-bottom:1rem;text-shadow:0 2px 4px rgba(0,0,0,.2)}
+    .hero-subtitle{font-size:1.2rem;margin-bottom:2rem;opacity:.95;text-shadow:0 1px 2px rgba(0,0,0,.2)}
+    .hero-btn{padding:1rem 2.5rem;font-size:1rem;font-weight:600;border:none;border-radius:8px;cursor:pointer;transition:all .8s ease;box-shadow:0 4px 12px rgba(0,0,0,.15); opacity:0; transform: translateY(20px);}
+    .hero-btn.show{opacity:1; transform: translateY(0);}
+    .calculator{padding:4rem 2rem;max-width:800px;margin:0 auto;background:#f8f9fa}
+    .section-title{font-size:2rem;font-weight:700;margin-bottom:3rem;text-align:center;color:var(--primary-color); opacity:0; transform: translateY(20px); transition: all 0.8s ease-out;}
+    .section-title.show{opacity:1; transform: translateY(0);}
+    .calc-container{background:white;padding:2rem;border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,.1); opacity:0; transform: translateY(20px); transition: all 0.8s ease-out;}
+    .calc-container.show{opacity:1; transform: translateY(0);}
+    .calc-field{margin-bottom:2rem}
+    .calc-label{display:flex;justify-content:space-between;margin-bottom:.8rem;font-weight:600;color:#333}
+    .calc-value{font-size:1.3rem;color:var(--primary-color);font-weight:700}
+    .calc-slider{width:100%;height:6px;border-radius:3px;background:#ddd;outline:none;-webkit-appearance:none;appearance:none;cursor:pointer}
+    .calc-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:24px;height:24px;border-radius:50%;background:var(--primary-color);cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.2);transition:all .2s}
+    .calc-slider::-webkit-slider-thumb:hover{transform:scale(1.2)}
+    .calc-slider::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:var(--primary-color);cursor:pointer;border:none;box-shadow:0 2px 8px rgba(0,0,0,.2);transition:all .2s}
+    .calc-slider::-moz-range-thumb:hover{transform:scale(1.2)}
+    .calc-result{margin-top:2rem;padding:1.5rem;background:linear-gradient(135deg,var(--primary-color) 0%,var(--secondary-color) 100%);color:white;border-radius:8px;text-align:center}
+    .result-label{font-size:.9rem;opacity:.9;margin-bottom:.5rem}
+    .result-value{font-size:2rem;font-weight:700}
+    .benefits{padding:4rem 2rem;background:white}
+    .benefits-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2rem;max-width:1000px;margin:0 auto}
+    .benefit-card{padding:2rem;background:#f8f9fa;border-radius:12px;text-align:center;transition:all .5s;opacity:0; transform: translateY(20px);}
+    .benefit-card.show{opacity:1; transform: translateY(0);}
+    .benefit-card:hover{border-color:var(--primary-color);transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,.1)}
+    .benefit-icon{font-size:2.5rem;margin-bottom:1rem;display:inline-block}
+    .benefit-title{font-size:1.1rem;font-weight:700;color:#333;margin-bottom:.5rem}
+    .benefit-text{color:#666;font-size:.95rem}
+    .form-section{padding:4rem 2rem;background:#f8f9fa}
+    .form-container{max-width:500px;margin:0 auto;background:white;padding:2rem;border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,.1);opacity:0; transform: translateY(20px); transition: all 0.8s ease-out;}
+    .form-container.show{opacity:1; transform: translateY(0);}
+    .form-group{margin-bottom:1.5rem}
+    .form-label{display:block;margin-bottom:.5rem;font-weight:600;color:#333}
+    .form-input{width:100%;padding:.8rem;border:2px solid #ddd;border-radius:6px;font-size:1rem;transition:border-color .3s;font-family:inherit}
+    .form-input:focus{outline:none;border-color:var(--primary-color)}
+    .submit-btn{width:100%;padding:1rem;background:var(--primary-color);color:white;border:none;border-radius:6px;font-size:1.1rem;font-weight:600;cursor:pointer;transition:all .3s}
+    .submit-btn:hover{opacity:.9;transform:translateY(-2px)}
+    .form-message{padding:1rem;margin-top:1rem;border-radius:6px;text-align:center;display:none}
+    .form-message.success{background:#d4edda;color:#155724;display:block}
+    footer{background:#1a1a1a;color:white;padding:2rem;text-align:center}
+    @media(max-width:768px){.hero-title{font-size:1.8rem}.hero-subtitle{font-size:1rem}.section-title{font-size:1.5rem}.hero-btn{padding:.8rem 2rem;font-size:.95rem}.navbar{padding:1rem}.logo{font-size:1.2rem}}
+    @media(max-width:480px){.hero{min-height:300px}.hero-title{font-size:1.5rem}.hero-subtitle{font-size:.9rem}.calc-container{padding:1.5rem}.form-container{padding:1.5rem}}
 </style>
 </head>
 <body>
-
-<canvas id="particleCanvas"></canvas>
-
 <nav class="navbar">
     <div class="logo">MyZaim</div>
+    <button class="admin-btn" onclick="goToAdmin()">⚙️ Админ-панель</button>
 </nav>
 
 <section class="hero">
-    <div class="hero-content">
-        <h1 class="fade-in delay-1" id="heroTitle">Быстрые займы онлайн</h1>
-        <p class="fade-in delay-2" id="heroSubtitle">Получите до 100,000 леи за 15 минут</p>
-        <button class="hero-btn fade-in delay-3" id="heroBtn" onclick="scrollToForm()">Получить займ</button>
+    <img id="heroBanner" class="hero-banner" src="" alt="Banner">
+    <div class="hero-content" id="heroContent">
+        <h1 class="hero-title" id="heroTitle"></h1>
+        <p class="hero-subtitle" id="heroSubtitle"></p>
+        <button class="hero-btn" id="heroBtn" onclick="scrollToForm()"></button>
     </div>
 </section>
 
@@ -217,10 +120,6 @@ footer{background:rgba(0,0,0,0.3);padding:2rem;text-align:center;color:#fff}
                 <input type="text" class="form-input" name="firstName" required>
             </div>
             <div class="form-group">
-                <label class="form-label">Почта</label>
-                <input type="email" class="form-input" name="email" required>
-            </div>
-            <div class="form-group">
                 <label class="form-label">Телефон</label>
                 <input type="tel" class="form-input" name="phone" required>
             </div>
@@ -235,31 +134,84 @@ footer{background:rgba(0,0,0,0.3);padding:2rem;text-align:center;color:#fff}
 </footer>
 
 <script>
-// Калькулятор
+let currency = "MDL"; // дефолт
+
+async function loadConfig() {
+    try {
+        const response = await fetch('config.json');
+        if (!response.ok) throw new Error('Config не найден');
+        return await response.json();
+    } catch(e) {
+        console.error(e);
+        return { 
+            primaryColor:'#667eea',
+            secondaryColor:'#764ba2',
+            heroTitle:'Быстрые займы онлайн',
+            heroSubtitle:'Получите до 100,000',
+            heroButtonText:'Получить займ',
+            heroButtonColor:'#ff6b6b',
+            bannerUrl:'',
+            currency:"MDL",
+            benefits:[]
+        };
+    }
+}
+
+function applyConfig(config){
+    currency = config.currency || "MDL";
+
+    const root=document.documentElement;
+    root.style.setProperty('--primary-color',config.primaryColor);
+    root.style.setProperty('--secondary-color',config.secondaryColor);
+
+    document.getElementById('heroTitle').textContent=config.heroTitle;
+    document.getElementById('heroSubtitle').textContent=config.heroSubtitle;
+
+    const heroBtn=document.getElementById('heroBtn');
+    heroBtn.textContent=config.heroButtonText;
+    heroBtn.style.background=config.heroButtonColor;
+    heroBtn.style.color='#fff';
+
+    document.getElementById('heroBanner').src=config.bannerUrl;
+
+    const grid=document.getElementById('benefitsGrid');
+    grid.innerHTML=config.benefits.map(b=>`
+        <div class="benefit-card">
+            <div class="benefit-icon">✨</div>
+            <div class="benefit-title">${b.title}</div>
+            <div class="benefit-text">${b.text}</div>
+        </div>
+    `).join('');
+}
+
 const amountSlider=document.getElementById('amountSlider');
 const daysSlider=document.getElementById('daysSlider');
-let currency="MDL";
 
 function updateCalculator(){
     const amount=parseInt(amountSlider.value);
     const days=parseInt(daysSlider.value);
+
     const commission=amount*0.005*days;
     const total=amount+commission;
-    document.getElementById('amountValue').textContent = amount.toLocaleString('ru-RU') + " " + currency;
-    document.getElementById('daysValue').textContent = days + " дн.";
-    document.getElementById('resultAmount').textContent = Math.round(total).toLocaleString('ru-RU') + " " + currency;
+
+    document.getElementById('amountValue').textContent =
+        amount.toLocaleString('ru-RU') + " " + currency;
+
+    document.getElementById('daysValue').textContent =
+        days + " дн.";
+
+    document.getElementById('resultAmount').textContent =
+        Math.round(total).toLocaleString('ru-RU') + " " + currency;
 }
+
 amountSlider.addEventListener('input',updateCalculator);
 daysSlider.addEventListener('input',updateCalculator);
-updateCalculator();
 
-// Форма
 function handleFormSubmit(e){
     e.preventDefault();
     const formData={
         lastName:e.target.lastName.value,
         firstName:e.target.firstName.value,
-        email:e.target.email.value,
         phone:e.target.phone.value
     };
     console.log('Заявка:',formData);
@@ -268,83 +220,45 @@ function handleFormSubmit(e){
     setTimeout(()=>{document.getElementById('formMessage').classList.remove('success')},3000);
 }
 
-function scrollToForm(){document.querySelector('.form-section').scrollIntoView({behavior:'smooth'});}
+function goToAdmin(){ alert('Админ-панель пока не готова'); }
+function scrollToForm(){ document.querySelector('.form-section').scrollIntoView({behavior:'smooth'}); }
 
-// Преимущества
-const benefits=[
-    {title:'Быстро', text:'Займы за 15 минут'},
-    {title:'Надежно', text:'Все данные защищены'},
-    {title:'Удобно', text:'Онлайн заявка с любого устройства'}
-];
-const grid=document.getElementById('benefitsGrid');
-grid.innerHTML=benefits.map(b=>`<div class="benefit-card"><h3 class="benefit-title">${b.title}</h3><p class="benefit-text">${b.text}</p></div>`).join('');
-document.querySelectorAll('.benefit-card').forEach((el,i)=>{
-    setTimeout(()=>{el.classList.add('show')}, i*200);
+// Анимация появления блоков при скролле
+function animateOnScroll() {
+    document.querySelectorAll('.section-title, .calc-container, .form-container, .benefit-card').forEach(el=>{
+        const windowBottom = window.innerHeight + window.scrollY;
+        if (windowBottom > el.offsetTop + 100) el.classList.add('show');
+    });
+}
+
+// Плавное появление hero-content и кнопки
+window.addEventListener('load', () => {
+    document.getElementById('heroContent').classList.add('show');
+    document.getElementById('heroBtn').classList.add('show');
+    animateOnScroll();
 });
 
-// Частицы
-const canvas = document.getElementById('particleCanvas');
-const ctx = canvas.getContext('2d');
-let width = canvas.width = window.innerWidth;
-let height = canvas.height = window.innerHeight;
-let mouse = {x:null,y:null};
-window.addEventListener('mousemove',e=>{mouse.x=e.x;mouse.y=e.y;});
-window.addEventListener('resize',()=>{width=canvas.width=window.innerWidth;height=canvas.height=window.innerHeight;initParticles();});
+window.addEventListener('scroll', animateOnScroll);
 
-class Particle{
-    constructor(){
-        this.x=Math.random()*width;
-        this.y=Math.random()*height;
-        this.size=Math.random()*3+1;
-        this.speedX=Math.random()*1-0.5;
-        this.speedY=Math.random()*1-0.5;
-    }
-    update(){
-        this.x+=this.speedX;
-        this.y+=this.speedY;
-        if(this.x>width||this.x<0) this.speedX*=-1;
-        if(this.y>height||this.y<0) this.speedY*=-1;
-
-        // Реакция на мышку
-        const dx=this.x-mouse.x;
-        const dy=this.y-mouse.y;
-        const dist=Math.sqrt(dx*dx+dy*dy);
-        if(dist<100){this.x+=dx/50;this.y+=dy/50;}
-    }
-    draw(){
-        ctx.fillStyle='white';
-        ctx.beginPath();
-        ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
-        ctx.fill();
-    }
-}
-let particlesArray=[];
-function initParticles(){particlesArray=[];for(let i=0;i<100;i++){particlesArray.push(new Particle());}}
-function connectParticles(){
-    for(let a=0;a<particlesArray.length;a++){
-        for(let b=a;b<particlesArray.length;b++){
-            let dx=particlesArray[a].x-particlesArray[b].x;
-            let dy=particlesArray[a].y-particlesArray[b].y;
-            let dist=Math.sqrt(dx*dx+dy*dy);
-            if(dist<100){
-                ctx.strokeStyle='rgba(255,255,255,'+(1-dist/100)+')';
-                ctx.lineWidth=1;
-                ctx.beginPath();
-                ctx.moveTo(particlesArray[a].x,particlesArray[a].y);
-                ctx.lineTo(particlesArray[b].x,particlesArray[b].y);
-                ctx.stroke();
-            }
-        }
-    }
-}
-function animateParticles(){
-    ctx.clearRect(0,0,width,height);
-    particlesArray.forEach(p=>{p.update();p.draw();});
-    connectParticles();
-    requestAnimationFrame(animateParticles);
-}
-initParticles();
-animateParticles();
+(async()=>{
+    const config=await loadConfig();
+    applyConfig(config);
+    updateCalculator();
+})();
 </script>
+
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/692d4171b93a681983f687e4/1jbccf8v1';
+s1.charset='UTF-8'; s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+<!--End of Tawk.to Script-->
+
 </body>
 </html>

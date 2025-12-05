@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>МикроЗайм - Быстрые займы онлайн</title>
+
 <style>
     :root {
         --primary-color: #667eea;
@@ -13,15 +14,51 @@
     body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;line-height:1.6;color:#333;background:#fff}
     .navbar{display:flex;justify-content:space-between;align-items:center;padding:1rem 2rem;background:white;box-shadow:0 2px 8px rgba(0,0,0,0.08);position:sticky;top:0;z-index:100}
     .logo{font-size:1.5rem;font-weight:700;color:var(--primary-color)}
-    .admin-btn{padding:.5rem 1rem;background:var(--secondary-color);color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:.9rem;transition:opacity .3s}
-    .admin-btn:hover{opacity:.9}
-    .hero{position:relative;min-height:400px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%)}
+    .hero{
+        position:relative;
+        min-height:400px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        overflow:hidden;
+        background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+    }
     .hero-banner{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:1;opacity:.8}
-    .hero-content{position:relative;z-index:2;text-align:center;color:white;padding:2rem;max-width:600px}
+
+    /* === HERO CONTENT (справа + анимация) === */
+    .hero-content{
+        position:relative;
+        z-index:2;
+        color:white;
+        padding:2rem;
+        max-width:600px;
+        display:flex;
+        flex-direction:column;
+        align-items:flex-end;
+        text-align:right;
+    }
+
+    /* Анимация */
+    .fade-in {
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeInUp 1s ease forwards;
+    }
+    .delay-1 { animation-delay: 0.2s; }
+    .delay-2 { animation-delay: 0.4s; }
+    .delay-3 { animation-delay: 0.6s; }
+    @keyframes fadeInUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
     .hero-title{font-size:2.5rem;font-weight:700;margin-bottom:1rem;text-shadow:0 2px 4px rgba(0,0,0,.2)}
     .hero-subtitle{font-size:1.2rem;margin-bottom:2rem;opacity:.95;text-shadow:0 1px 2px rgba(0,0,0,.2)}
     .hero-btn{padding:1rem 2.5rem;font-size:1rem;font-weight:600;border:none;border-radius:8px;cursor:pointer;transition:all .3s;box-shadow:0 4px 12px rgba(0,0,0,.15)}
     .hero-btn:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.2)}
+
     .calculator{padding:4rem 2rem;max-width:800px;margin:0 auto;background:#f8f9fa}
     .section-title{font-size:2rem;font-weight:700;margin-bottom:3rem;text-align:center;color:var(--primary-color)}
     .calc-container{background:white;padding:2rem;border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,.1)}
@@ -36,6 +73,7 @@
     .calc-result{margin-top:2rem;padding:1.5rem;background:linear-gradient(135deg,var(--primary-color) 0%,var(--secondary-color) 100%);color:white;border-radius:8px;text-align:center}
     .result-label{font-size:.9rem;opacity:.9;margin-bottom:.5rem}
     .result-value{font-size:2rem;font-weight:700}
+
     .benefits{padding:4rem 2rem;background:white}
     .benefits-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2rem;max-width:1000px;margin:0 auto}
     .benefit-card{padding:2rem;background:#f8f9fa;border-radius:12px;text-align:center;transition:all .3s;border:2px solid transparent}
@@ -43,6 +81,7 @@
     .benefit-icon{font-size:2.5rem;margin-bottom:1rem;display:inline-block}
     .benefit-title{font-size:1.1rem;font-weight:700;color:#333;margin-bottom:.5rem}
     .benefit-text{color:#666;font-size:.95rem}
+
     .form-section{padding:4rem 2rem;background:#f8f9fa}
     .form-container{max-width:500px;margin:0 auto;background:white;padding:2rem;border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,.1)}
     .form-group{margin-bottom:1.5rem}
@@ -53,12 +92,31 @@
     .submit-btn:hover{opacity:.9;transform:translateY(-2px)}
     .form-message{padding:1rem;margin-top:1rem;border-radius:6px;text-align:center;display:none}
     .form-message.success{background:#d4edda;color:#155724;display:block}
+
     footer{background:#1a1a1a;color:white;padding:2rem;text-align:center}
-    @media(max-width:768px){.hero-title{font-size:1.8rem}.hero-subtitle{font-size:1rem}.section-title{font-size:1.5rem}.hero-btn{padding:.8rem 2rem;font-size:.95rem}.navbar{padding:1rem}.logo{font-size:1.2rem}}
-    @media(max-width:480px){.hero{min-height:300px}.hero-title{font-size:1.5rem}.hero-subtitle{font-size:.9rem}.calc-container{padding:1.5rem}.form-container{padding:1.5rem}}
+
+    @media(max-width:768px){
+        .hero-title{font-size:1.8rem}
+        .hero-subtitle{font-size:1rem}
+        .section-title{font-size:1.5rem}
+        .hero-btn{padding:.8rem 2rem;font-size:.95rem}
+        .navbar{padding:1rem}
+        .logo{font-size:1.2rem}
+        .hero-content{align-items:center;text-align:center}
+    }
+
+    @media(max-width:480px){
+        .hero{min-height:300px}
+        .hero-title{font-size:1.5rem}
+        .hero-subtitle{font-size:.9rem}
+        .calc-container{padding:1.5rem}
+        .form-container{padding:1.5rem}
+    }
 </style>
 </head>
+
 <body>
+
 <nav class="navbar">
     <div class="logo">MyZaim</div>
 </nav>
@@ -66,9 +124,9 @@
 <section class="hero">
     <img id="heroBanner" class="hero-banner" src="" alt="Banner">
     <div class="hero-content">
-        <h1 class="hero-title" id="heroTitle"></h1>
-        <p class="hero-subtitle" id="heroSubtitle"></p>
-        <button class="hero-btn" id="heroBtn" onclick="scrollToForm()"></button>
+        <h1 class="fade-in delay-1" id="heroTitle"></h1>
+        <p class="fade-in delay-2" id="heroSubtitle"></p>
+        <button class="hero-btn fade-in delay-3" id="heroBtn" onclick="scrollToForm()"></button>
     </div>
 </section>
 
@@ -101,7 +159,7 @@
     <div class="benefits-grid" id="benefitsGrid"></div>
 </section>
 
-<section class="form-section">
+<section class="form-section" id="form">
     <h2 class="section-title">Подайте заявку</h2>
     <div class="form-container">
         <form id="applicationForm" onsubmit="handleFormSubmit(event)">
@@ -132,7 +190,7 @@
 </footer>
 
 <script>
-let currency = "MDL"; // дефолт
+let currency = "MDL";
 
 async function loadConfig() {
     try {
@@ -141,11 +199,11 @@ async function loadConfig() {
         return await response.json();
     } catch(e) {
         console.error(e);
-        return { 
+        return {
             primaryColor:'#667eea',
             secondaryColor:'#764ba2',
             heroTitle:'Быстрые займы онлайн',
-            heroSubtitle:'Получите до 100,000',
+            heroSubtitle:'Получите до 100,000 леи за 15 минут',
             heroButtonText:'Получить займ',
             heroButtonColor:'#ff6b6b',
             bannerUrl:'',
@@ -208,19 +266,18 @@ daysSlider.addEventListener('input',updateCalculator);
 function handleFormSubmit(e){
     e.preventDefault();
     const formData={
-    lastName:e.target.lastName.value,
-    firstName:e.target.firstName.value,
-    phone:e.target.phone.value,
-    email:e.target.email.value
-};
+        lastName:e.target.lastName.value,
+        firstName:e.target.firstName.value,
+        phone:e.target.phone.value,
+        email:e.target.email.value
+    };
     console.log('Заявка:',formData);
     document.getElementById('formMessage').classList.add('success');
     e.target.reset();
     setTimeout(()=>{document.getElementById('formMessage').classList.remove('success')},3000);
 }
 
-function goToAdmin(){ alert('Админ-панель пока не готова'); }
-function scrollToForm(){ 
+function scrollToForm(){
     document.querySelector('.form-section').scrollIntoView({behavior:'smooth'});
 }
 
@@ -230,20 +287,6 @@ function scrollToForm(){
     updateCalculator();
 })();
 </script>
-
-    <!--Start of Tawk.to Script-->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/69326b750a1305197e14cf17/1jbmf7hfb';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
-<!--End of Tawk.to Script-->
 
 </body>
 </html>

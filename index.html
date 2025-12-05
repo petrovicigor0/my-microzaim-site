@@ -13,7 +13,7 @@
     *{margin:0;padding:0;box-sizing:border-box}
     body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;line-height:1.6;color:#333;background:#fff;position:relative;min-height:100vh;overflow-x:hidden}
     
-    /* Анимация фона с частицами */
+    /* Анимация фона с частицами - фиксированная позиция */
     #particles-js {
         position: fixed;
         width: 100%;
@@ -31,7 +31,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(-45deg, #f8f9fa, #e9ecef, #dee2e6, #f8f9fa);
+        background: linear-gradient(-45deg, rgba(248,249,250,0.7), rgba(233,236,239,0.7), rgba(222,226,230,0.7), rgba(248,249,250,0.7));
         background-size: 400% 400%;
         z-index: -2;
         animation: gradientShift 15s ease infinite;
@@ -92,7 +92,8 @@
         100% { transform: scale(1); opacity: 1; }
     }
     
-    .calculator{padding:4rem 2rem;max-width:800px;margin:0 auto;background:rgba(248,249,250,0.9);border-radius:20px;margin-top:-50px;position:relative;z-index:10;box-shadow:0 10px 40px rgba(0,0,0,0.1);opacity:0;transform:translateY(30px);animation: fadeUp 0.8s ease-out 1s forwards}
+    /* Калькулятор - более прозрачный */
+    .calculator{padding:4rem 2rem;max-width:800px;margin:0 auto;border-radius:20px;margin-top:-50px;position:relative;z-index:10;opacity:0;transform:translateY(30px);animation: fadeUp 0.8s ease-out 1s forwards}
     
     @keyframes fadeUp {
         to { opacity: 1; transform: translateY(0); }
@@ -101,7 +102,7 @@
     .section-title{font-size:2rem;font-weight:700;margin-bottom:3rem;text-align:center;color:var(--primary-color);position:relative}
     .section-title::after{content:'';position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);width:60px;height:4px;background:var(--secondary-color);border-radius:2px}
     
-    .calc-container{background:white;padding:2.5rem;border-radius:16px;box-shadow:0 8px 30px rgba(0,0,0,0.08)}
+    .calc-container{background:rgba(255,255,255,0.85);padding:2.5rem;border-radius:16px;box-shadow:0 8px 30px rgba(0,0,0,0.08);backdrop-filter: blur(10px);-webkit-backdrop-filter: blur(10px)}
     .calc-field{margin-bottom:2rem;opacity:0;transform:translateY(20px)}
     
     .calc-field:nth-child(1) { animation: fadeUp 0.6s ease-out 1.2s forwards; }
@@ -123,23 +124,24 @@
     .result-label{font-size:.9rem;opacity:.9;margin-bottom:.5rem}
     .result-value{font-size:2.2rem;font-weight:800;transition:all .3s}
     
-    .benefits{padding:5rem 2rem;background:white}
+    /* Преимущества - без белого фона */
+    .benefits{padding:5rem 2rem}
     .benefits-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2rem;max-width:1000px;margin:0 auto}
-    .benefit-card{padding:2.5rem 2rem;background:#f8f9fa;border-radius:16px;text-align:center;transition:all .4s;border:2px solid transparent;opacity:0;transform:translateY(30px);animation: fadeUp 0.6s ease-out forwards}
+    .benefit-card{padding:2.5rem 2rem;background:rgba(255,255,255,0.9);border-radius:16px;text-align:center;transition:all .4s;border:2px solid transparent;opacity:0;transform:translateY(30px);animation: fadeUp 0.6s ease-out forwards;box-shadow:0 10px 30px rgba(0,0,0,0.08);backdrop-filter: blur(5px);-webkit-backdrop-filter: blur(5px)}
     
     .benefit-card:nth-child(1) { animation-delay: 0.2s; }
     .benefit-card:nth-child(2) { animation-delay: 0.4s; }
     .benefit-card:nth-child(3) { animation-delay: 0.6s; }
     .benefit-card:nth-child(4) { animation-delay: 0.8s; }
     
-    .benefit-card:hover{border-color:var(--primary-color);transform:translateY(-8px) scale(1.02);box-shadow:0 15px 35px rgba(0,0,0,0.1)}
+    .benefit-card:hover{border-color:var(--primary-color);transform:translateY(-8px) scale(1.02);box-shadow:0 15px 35px rgba(0,0,0,0.15)}
     .benefit-icon{font-size:3rem;margin-bottom:1.5rem;display:inline-block;transition:all .3s}
     .benefit-card:hover .benefit-icon{transform:scale(1.2) rotate(5deg)}
     .benefit-title{font-size:1.2rem;font-weight:700;color:#333;margin-bottom:.8rem}
     .benefit-text{color:#666;font-size:1rem;line-height:1.5}
     
-    .form-section{padding:5rem 2rem;background:linear-gradient(135deg, rgba(248,249,250,0.9) 0%, rgba(233,236,239,0.9) 100%)}
-    .form-container{max-width:500px;margin:0 auto;background:white;padding:2.5rem;border-radius:16px;box-shadow:0 10px 40px rgba(0,0,0,0.1);opacity:0;transform:translateY(30px);animation: fadeUp 0.8s ease-out 1s forwards}
+    .form-section{padding:5rem 2rem}
+    .form-container{max-width:500px;margin:0 auto;background:rgba(255,255,255,0.9);padding:2.5rem;border-radius:16px;box-shadow:0 10px 40px rgba(0,0,0,0.1);opacity:0;transform:translateY(30px);animation: fadeUp 0.8s ease-out 1s forwards;backdrop-filter: blur(5px);-webkit-backdrop-filter: blur(5px)}
     .form-group{margin-bottom:1.8rem;opacity:0;transform:translateX(-20px)}
     
     .form-group:nth-child(1) { animation: slideInRight 0.5s ease-out 1.2s forwards; }
@@ -147,7 +149,7 @@
     .form-group:nth-child(3) { animation: slideInRight 0.5s ease-out 1.6s forwards; }
     
     .form-label{display:block;margin-bottom:.8rem;font-weight:600;color:#333;font-size:0.95rem}
-    .form-input{width:100%;padding:1rem;border:2px solid #e0e0e0;border-radius:8px;font-size:1rem;transition:all .3s;font-family:inherit;background:#fafafa}
+    .form-input{width:100%;padding:1rem;border:2px solid #e0e0e0;border-radius:8px;font-size:1rem;transition:all .3s;font-family:inherit;background:rgba(255,255,255,0.8)}
     .form-input:focus{outline:none;border-color:var(--primary-color);background:white;box-shadow:0 0 0 3px rgba(102,126,234,0.1)}
     .form-input:focus::placeholder{opacity:0.5}
     
@@ -166,7 +168,7 @@
         to { transform: translateY(0); opacity: 1; }
     }
     
-    footer{background:#1a1a1a;color:white;padding:2rem;text-align:center;position:relative;z-index:10}
+    footer{background:rgba(26,26,26,0.9);color:white;padding:2rem;text-align:center;position:relative;z-index:10;backdrop-filter: blur(5px);-webkit-backdrop-filter: blur(5px)}
     
     /* Плавный скролл */
     html {
@@ -181,14 +183,15 @@
         .hero-btn{padding:1rem 2rem}
         .calculator{margin:0 1rem;margin-top:-30px;padding:3rem 1.5rem}
         .calc-container{padding:1.8rem}
+        .benefits{padding:3rem 1rem}
     }
     
     @media(max-width:480px){
         .hero{min-height:400px}
         .hero-title{font-size:1.8rem}
         .hero-subtitle{font-size:1rem}
-        .benefits{padding:3rem 1rem}
         .benefit-card{padding:2rem 1.5rem}
+        .form-section{padding:3rem 1rem}
     }
 </style>
 </head>
@@ -377,65 +380,25 @@
         document.querySelector('.form-section').scrollIntoView({behavior:'smooth'});
     }
 
-    // Функция для определения контрастного цвета
-    function getContrastColor(backgroundColor) {
-        // Если цвет светлый - возвращаем темный, если темный - светлый
-        const r = parseInt(backgroundColor.substr(1, 2), 16);
-        const g = parseInt(backgroundColor.substr(3, 2), 16);
-        const b = parseInt(backgroundColor.substr(5, 2), 16);
-        
-        // Формула восприятия яркости
-        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
-        
-        return brightness > 128 ? '#333333' : '#ffffff';
-    }
-
-    // Функция для определения цвета частиц на основе фона
-    function getParticleColorBasedOnBackground() {
-        // Получаем цвет фона body
-        const bgColor = getComputedStyle(document.body).backgroundColor;
-        
-        // Парсим RGB
-        const rgb = bgColor.match(/\d+/g);
-        if (!rgb) return '#667eea'; // fallback
-        
-        const r = parseInt(rgb[0]);
-        const g = parseInt(rgb[1]);
-        const b = parseInt(rgb[2]);
-        
-        // Определяем яркость фона
-        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
-        
-        // Если фон светлый (яркость > 128) - темные частицы
-        // Если фон темный - светлые частицы
-        if (brightness > 180) {
-            // Очень светлый фон - темно-синие частицы
-            return '#2c3e50';
-        } else if (brightness > 128) {
-            // Светлый фон - средние по яркости
-            return '#3498db';
-        } else if (brightness > 60) {
-            // Средний фон - яркие частицы
-            return '#e74c3c';
-        } else {
-            // Темный фон - светлые частицы
-            return '#ecf0f1';
-        }
-    }
-
-    // Функция для создания умных частиц
-    function initSmartParticles() {
+    // Функция для инициализации стабильных частиц без мерцания
+    function initStableParticles() {
         if (typeof particlesJS !== 'undefined') {
-            // Получаем цвет частиц на основе фона
-            const particleColor = getParticleColorBasedOnBackground();
+            // Используем средний цвет между основным и вторичным
+            const primaryColor = getComputedStyle(document.documentElement)
+                .getPropertyValue('--primary-color').trim();
+            const secondaryColor = getComputedStyle(document.documentElement)
+                .getPropertyValue('--secondary-color').trim();
+            
+            // Выбираем более темный цвет для лучшей видимости
+            const particleColor = '#2c3e50'; // Темно-синий, хорошо видно на светлом фоне
             
             particlesJS('particles-js', {
                 particles: {
                     number: { 
-                        value: 50, 
+                        value: 40, // Уменьшили количество для меньшей нагрузки
                         density: { 
                             enable: true, 
-                            value_area: 800 
+                            value_area: 1000 
                         }
                     },
                     color: { 
@@ -445,35 +408,29 @@
                         type: "circle" 
                     },
                     opacity: { 
-                        value: 0.5, // Увеличили прозрачность
-                        random: true,
+                        value: 0.4, // Постоянная прозрачность
+                        random: false, // Убрали случайность для стабильности
                         anim: {
-                            enable: true,
-                            speed: 1,
-                            opacity_min: 0.1,
-                            sync: false
+                            enable: false // Отключили анимацию прозрачности
                         }
                     },
                     size: { 
                         value: 3, 
                         random: true,
                         anim: {
-                            enable: true,
-                            speed: 2,
-                            size_min: 0.5,
-                            sync: false
+                            enable: false, // Отключили анимацию размера
                         }
                     },
                     line_linked: {
                         enable: true,
                         distance: 150,
                         color: particleColor,
-                        opacity: 0.4, // Увеличили видимость линий
+                        opacity: 0.3, // Более тонкие линии
                         width: 1
                     },
                     move: {
                         enable: true,
-                        speed: 1.5,
+                        speed: 1, // Медленнее движение
                         direction: "none",
                         random: true,
                         straight: false,
@@ -486,11 +443,10 @@
                     events: {
                         onhover: { 
                             enable: true, 
-                            mode: "grab" // Изменили на grab для лучшего эффекта
+                            mode: "repulse" // Режим отталкивания
                         },
                         onclick: { 
-                            enable: true, 
-                            mode: "push" 
+                            enable: false, // Отключили клик, чтобы не создавались новые частицы
                         },
                         resize: true
                     }
@@ -498,30 +454,8 @@
                 retina_detect: true
             });
             
-            // Обновляем частицы при скролле (меняется видимый фон)
-            let lastScrollY = window.scrollY;
-            window.addEventListener('scroll', function() {
-                if (Math.abs(window.scrollY - lastScrollY) > 100) {
-                    lastScrollY = window.scrollY;
-                    updateParticlesColor();
-                }
-            });
-            
-            // Обновляем цвет частиц при изменении размера окна
-            window.addEventListener('resize', updateParticlesColor);
-            
         } else {
             console.log('Библиотека particles.js не загрузилась');
-        }
-    }
-
-    // Функция обновления цвета частиц
-    function updateParticlesColor() {
-        if (window.pJSDom && window.pJSDom[0] && window.pJSDom[0].pJS) {
-            const particleColor = getParticleColorBasedOnBackground();
-            window.pJSDom[0].pJS.particles.color.value = particleColor;
-            window.pJSDom[0].pJS.particles.line_linked.color = particleColor;
-            window.pJSDom[0].pJS.fn.particlesRefresh();
         }
     }
 
@@ -531,15 +465,10 @@
         applyConfig(config);
         updateCalculator();
         
-        // Инициализируем умные частицы
+        // Инициализируем стабильные частицы без мерцания
         setTimeout(() => {
-            initSmartParticles();
-        }, 500); // Даем время на загрузку страницы
-        
-        // Обновляем частицы при изменении конфига
-        document.addEventListener('configLoaded', function() {
-            setTimeout(updateParticlesColor, 100);
-        });
+            initStableParticles();
+        }, 500);
     })();
     </script>
 

@@ -265,6 +265,9 @@
         <p>&copy; 2025 MyZaim. Все права защищены.</p>
     </footer>
 
+    <!-- Подключаем библиотеку particles.js -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    
     <script>
     let currency = "MDL"; // дефолт
 
@@ -373,16 +376,38 @@
         document.querySelector('.form-section').scrollIntoView({behavior:'smooth'});
     }
 
-    // Инициализация частиц
-    function initParticles() {
+    // Инициализация частиц после загрузки страницы
+    document.addEventListener('DOMContentLoaded', function() {
+        // Инициализируем частицы только если библиотека загрузилась
         if (typeof particlesJS !== 'undefined') {
             particlesJS('particles-js', {
                 particles: {
-                    number: { value: 40, density: { enable: true, value_area: 800 } },
-                    color: { value: "#667eea" },
-                    shape: { type: "circle" },
-                    opacity: { value: 0.3, random: true },
-                    size: { value: 3, random: true },
+                    number: { 
+                        value: 60, 
+                        density: { 
+                            enable: true, 
+                            value_area: 1000 
+                        }
+                    },
+                    color: { 
+                        value: "#667eea" 
+                    },
+                    shape: { 
+                        type: "circle" 
+                    },
+                    opacity: { 
+                        value: 0.3, 
+                        random: true 
+                    },
+                    size: { 
+                        value: 3, 
+                        random: true,
+                        anim: {
+                            enable: true,
+                            speed: 2,
+                            size_min: 0.1
+                        }
+                    },
                     line_linked: {
                         enable: true,
                         distance: 150,
@@ -403,29 +428,44 @@
                 interactivity: {
                     detect_on: "canvas",
                     events: {
-                        onhover: { enable: true, mode: "repulse" },
-                        onclick: { enable: true, mode: "push" },
+                        onhover: { 
+                            enable: true, 
+                            mode: "repulse" 
+                        },
+                        onclick: { 
+                            enable: true, 
+                            mode: "push" 
+                        },
                         resize: true
                     }
                 },
                 retina_detect: true
             });
+            
+            // Меняем цвет частиц в зависимости от темы конфига
+            document.addEventListener('configLoaded', function() {
+                const primaryColor = getComputedStyle(document.documentElement)
+                    .getPropertyValue('--primary-color').trim();
+                
+                if (window.pJSDom && window.pJSDom[0] && window.pJSDom[0].pJS) {
+                    window.pJSDom[0].pJS.particles.color.value = primaryColor;
+                    window.pJSDom[0].pJS.particles.line_linked.color = primaryColor;
+                    window.pJSDom[0].pJS.fn.particlesRefresh();
+                }
+            });
+        } else {
+            console.log('Библиотека particles.js не загрузилась');
         }
-    }
+    });
 
-    // Загрузка particles.js
-    function loadParticlesJS() {
-        const script = document.createElement('script');
-        script.src = 'https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js';
-        script.onload = initParticles;
-        document.head.appendChild(script);
-    }
-
+    // Основная инициализация
     (async()=>{
-        await loadParticlesJS();
         const config=await loadConfig();
         applyConfig(config);
         updateCalculator();
+        
+        // Триггерим событие загрузки конфига
+        document.dispatchEvent(new Event('configLoaded'));
     })();
     </script>
 

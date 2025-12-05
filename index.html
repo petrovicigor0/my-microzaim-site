@@ -117,6 +117,10 @@
                 <label class="form-label">Телефон</label>
                 <input type="tel" class="form-input" name="phone" required>
             </div>
+            <div class="form-group">
+                <label class="form-label">E-mail</label>
+                <input type="email" class="form-input" name="email" required>
+            </div>
             <button type="submit" class="submit-btn">Отправить заявку</button>
             <div class="form-message" id="formMessage">✓ Заявка успешно отправлена!</div>
         </form>
@@ -204,10 +208,11 @@ daysSlider.addEventListener('input',updateCalculator);
 function handleFormSubmit(e){
     e.preventDefault();
     const formData={
-        lastName:e.target.lastName.value,
-        firstName:e.target.firstName.value,
-        phone:e.target.phone.value
-    };
+    lastName:e.target.lastName.value,
+    firstName:e.target.firstName.value,
+    phone:e.target.phone.value,
+    email:e.target.email.value
+};
     console.log('Заявка:',formData);
     document.getElementById('formMessage').classList.add('success');
     e.target.reset();

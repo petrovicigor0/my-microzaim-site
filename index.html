@@ -8,6 +8,7 @@
     :root {
         --primary-color: #667eea;
         --secondary-color: #764ba2;
+        --bg-lightness: 90%; /* начальная светлость фона */
     }
     *{margin:0;padding:0;box-sizing:border-box}
     body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;line-height:1.6;color:#333;background:#fff;position:relative;min-height:100vh;overflow-x:hidden}
@@ -376,28 +377,82 @@
         document.querySelector('.form-section').scrollIntoView({behavior:'smooth'});
     }
 
-    // Инициализация частиц после загрузки страницы
-    document.addEventListener('DOMContentLoaded', function() {
-        // Инициализируем частицы только если библиотека загрузилась
+    // Функция для определения контрастного цвета
+    function getContrastColor(backgroundColor) {
+        // Если цвет светлый - возвращаем темный, если темный - светлый
+        const r = parseInt(backgroundColor.substr(1, 2), 16);
+        const g = parseInt(backgroundColor.substr(3, 2), 16);
+        const b = parseInt(backgroundColor.substr(5, 2), 16);
+        
+        // Формула восприятия яркости
+        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        
+        return brightness > 128 ? '#333333' : '#ffffff';
+    }
+
+    // Функция для определения цвета частиц на основе фона
+    function getParticleColorBasedOnBackground() {
+        // Получаем цвет фона body
+        const bgColor = getComputedStyle(document.body).backgroundColor;
+        
+        // Парсим RGB
+        const rgb = bgColor.match(/\d+/g);
+        if (!rgb) return '#667eea'; // fallback
+        
+        const r = parseInt(rgb[0]);
+        const g = parseInt(rgb[1]);
+        const b = parseInt(rgb[2]);
+        
+        // Определяем яркость фона
+        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        
+        // Если фон светлый (яркость > 128) - темные частицы
+        // Если фон темный - светлые частицы
+        if (brightness > 180) {
+            // Очень светлый фон - темно-синие частицы
+            return '#2c3e50';
+        } else if (brightness > 128) {
+            // Светлый фон - средние по яркости
+            return '#3498db';
+        } else if (brightness > 60) {
+            // Средний фон - яркие частицы
+            return '#e74c3c';
+        } else {
+            // Темный фон - светлые частицы
+            return '#ecf0f1';
+        }
+    }
+
+    // Функция для создания умных частиц
+    function initSmartParticles() {
         if (typeof particlesJS !== 'undefined') {
+            // Получаем цвет частиц на основе фона
+            const particleColor = getParticleColorBasedOnBackground();
+            
             particlesJS('particles-js', {
                 particles: {
                     number: { 
-                        value: 60, 
+                        value: 50, 
                         density: { 
                             enable: true, 
-                            value_area: 1000 
+                            value_area: 800 
                         }
                     },
                     color: { 
-                        value: "#667eea" 
+                        value: particleColor
                     },
                     shape: { 
                         type: "circle" 
                     },
                     opacity: { 
-                        value: 0.3, 
-                        random: true 
+                        value: 0.5, // Увеличили прозрачность
+                        random: true,
+                        anim: {
+                            enable: true,
+                            speed: 1,
+                            opacity_min: 0.1,
+                            sync: false
+                        }
                     },
                     size: { 
                         value: 3, 
@@ -405,19 +460,20 @@
                         anim: {
                             enable: true,
                             speed: 2,
-                            size_min: 0.1
+                            size_min: 0.5,
+                            sync: false
                         }
                     },
                     line_linked: {
                         enable: true,
                         distance: 150,
-                        color: "#667eea",
-                        opacity: 0.2,
+                        color: particleColor,
+                        opacity: 0.4, // Увеличили видимость линий
                         width: 1
                     },
                     move: {
                         enable: true,
-                        speed: 2,
+                        speed: 1.5,
                         direction: "none",
                         random: true,
                         straight: false,
@@ -430,7 +486,7 @@
                     events: {
                         onhover: { 
                             enable: true, 
-                            mode: "repulse" 
+                            mode: "grab" // Изменили на grab для лучшего эффекта
                         },
                         onclick: { 
                             enable: true, 
@@ -442,21 +498,32 @@
                 retina_detect: true
             });
             
-            // Меняем цвет частиц в зависимости от темы конфига
-            document.addEventListener('configLoaded', function() {
-                const primaryColor = getComputedStyle(document.documentElement)
-                    .getPropertyValue('--primary-color').trim();
-                
-                if (window.pJSDom && window.pJSDom[0] && window.pJSDom[0].pJS) {
-                    window.pJSDom[0].pJS.particles.color.value = primaryColor;
-                    window.pJSDom[0].pJS.particles.line_linked.color = primaryColor;
-                    window.pJSDom[0].pJS.fn.particlesRefresh();
+            // Обновляем частицы при скролле (меняется видимый фон)
+            let lastScrollY = window.scrollY;
+            window.addEventListener('scroll', function() {
+                if (Math.abs(window.scrollY - lastScrollY) > 100) {
+                    lastScrollY = window.scrollY;
+                    updateParticlesColor();
                 }
             });
+            
+            // Обновляем цвет частиц при изменении размера окна
+            window.addEventListener('resize', updateParticlesColor);
+            
         } else {
             console.log('Библиотека particles.js не загрузилась');
         }
-    });
+    }
+
+    // Функция обновления цвета частиц
+    function updateParticlesColor() {
+        if (window.pJSDom && window.pJSDom[0] && window.pJSDom[0].pJS) {
+            const particleColor = getParticleColorBasedOnBackground();
+            window.pJSDom[0].pJS.particles.color.value = particleColor;
+            window.pJSDom[0].pJS.particles.line_linked.color = particleColor;
+            window.pJSDom[0].pJS.fn.particlesRefresh();
+        }
+    }
 
     // Основная инициализация
     (async()=>{
@@ -464,8 +531,15 @@
         applyConfig(config);
         updateCalculator();
         
-        // Триггерим событие загрузки конфига
-        document.dispatchEvent(new Event('configLoaded'));
+        // Инициализируем умные частицы
+        setTimeout(() => {
+            initSmartParticles();
+        }, 500); // Даем время на загрузку страницы
+        
+        // Обновляем частицы при изменении конфига
+        document.addEventListener('configLoaded', function() {
+            setTimeout(updateParticlesColor, 100);
+        });
     })();
     </script>
 

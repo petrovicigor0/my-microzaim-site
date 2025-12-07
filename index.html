@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>МикроЗайм - Быстрые займы онлайн</title>
 <style>
+    /* ВАШ CSS КОД (без изменений) */
     :root {
         --primary-color: #667eea;
         --secondary-color: #764ba2;
@@ -261,11 +262,7 @@
     
     .form-message{padding:1.2rem;margin-top:1.5rem;border-radius:8px;text-align:center;display:none;animation: slideInUp 0.5s ease-out;backdrop-filter:blur(5px)}
     .form-message.success{background:rgba(212,237,218,0.9);color:#155724;display:block;border:1px solid rgba(195,230,203,0.5)}
-    
-    @keyframes slideInUp {
-        from { transform: translateY(10px); opacity: 0; }
-        to { transform: translateY(0); opacity: 1; }
-    }
+    .form-message.error{background:rgba(248,215,218,0.9);color:#721c24;display:block;border:1px solid rgba(245,198,203,0.5)}
     
     /* Футер прозрачный */
     footer{
@@ -406,7 +403,47 @@
     // ================ ФУНКЦИИ ДЛЯ GITHUB ================
     // Собираем полный токен из частей
     function getGitHubToken() {
-        return GITHUB_TOKEN_PARTS.join('');
+        const token = GITHUB_TOKEN_PARTS.join('');
+        console.log('🔑 Токен (первые 10 символов):', token.substring(0, 10) + '...');
+        return token;
+    }
+    
+    // Тестируем подключение к GitHub
+    async function testGitHubConnection() {
+        try {
+            const token = getGitHubToken();
+            const { owner, repo } = GITHUB_REPO;
+            
+            console.log('🔍 Тестируем подключение к GitHub...');
+            console.log('📁 Репозиторий:', `${owner}/${repo}`);
+            
+            const testUrl = `https://api.github.com/repos/${owner}/${repo}`;
+            console.log('🌐 URL запроса:', testUrl);
+            
+            const response = await fetch(testUrl, {
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Accept': 'application/vnd.github.v3+json'
+                }
+            });
+            
+            console.log('📊 Статус ответа:', response.status, response.statusText);
+            
+            if (response.ok) {
+                const data = await response.json();
+                console.log('✅ Подключение успешно!');
+                console.log('📦 Репозиторий:', data.full_name);
+                console.log('🔗 URL:', data.html_url);
+                return true;
+            } else {
+                const error = await response.text();
+                console.error('❌ Ошибка подключения:', error);
+                return false;
+            }
+        } catch (error) {
+            console.error('❌ Ошибка сети:', error);
+            return false;
+        }
     }
     
     // Сохраняем заявку в GitHub
@@ -416,9 +453,12 @@
             const { owner, repo, path, branch } = GITHUB_REPO;
             
             console.log('📤 Отправка заявки в GitHub...');
+            console.log('📝 Данные заявки:', applicationData);
             
             // 1. Получаем текущий файл
             const getUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}`;
+            console.log('🔗 GET запрос:', getUrl);
+            
             const getResponse = await fetch(getUrl, {
                 headers: {
                     'Authorization': `token ${token}`,
@@ -426,28 +466,39 @@
                 }
             });
             
+            console.log('📊 GET статус:', getResponse.status, getResponse.statusText);
+            
             let sha = null;
             let currentData = { applications: [] };
             
             if (getResponse.ok) {
                 const fileData = await getResponse.json();
                 sha = fileData.sha;
+                console.log('✅ Файл найден, SHA:', sha ? sha.substring(0, 20) + '...' : 'нет');
                 
                 // Декодируем base64
                 const content = atob(fileData.content.replace(/\n/g, ''));
                 currentData = JSON.parse(content);
-                console.log('📄 Текущий файл загружен, записей:', currentData.applications?.length || 0);
+                console.log('📄 Загружено записей:', currentData.applications?.length || 0);
             } else if (getResponse.status === 404) {
                 console.log('📄 Файл не найден, создаем новый');
             } else {
-                throw new Error(`Ошибка загрузки файла: ${getResponse.status}`);
+                const errorText = await getResponse.text();
+                throw new Error(`Ошибка загрузки файла (${getResponse.status}): ${errorText}`);
             }
             
             // 2. Создаем новую заявку
             const newApplication = {
                 id: Date.now(),
                 timestamp: new Date().toISOString(),
-                ...applicationData,
+                lastName: applicationData.lastName,
+                firstName: applicationData.firstName,
+                email: applicationData.email,
+                phone: applicationData.phone,
+                amount: applicationData.amount,
+                days: applicationData.days,
+                total: applicationData.total,
+                currency: applicationData.currency,
                 status: 'новая'
             };
             
@@ -461,11 +512,29 @@
             currentData.last_updated = new Date().toISOString();
             currentData.total_count = currentData.applications.length;
             
+            console.log('➕ Добавлена новая заявка, ID:', newApplication.id);
+            console.log('📊 Всего записей:', currentData.applications.length);
+            
             // 3. Кодируем в base64
             const content = btoa(JSON.stringify(currentData, null, 2));
+            console.log('🔤 Закодировано в base64, длина:', content.length);
             
             // 4. Сохраняем обратно в GitHub
             const updateUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+            console.log('🔗 PUT запрос:', updateUrl);
+            
+            const updateData = {
+                message: `📝 Добавлена заявка #${newApplication.id} от ${applicationData.firstName}`,
+                content: content,
+                branch: branch
+            };
+            
+            if (sha) {
+                updateData.sha = sha;
+            }
+            
+            console.log('📦 Данные для отправки:', updateData);
+            
             const updateResponse = await fetch(updateUrl, {
                 method: 'PUT',
                 headers: {
@@ -473,24 +542,26 @@
                     'Content-Type': 'application/json',
                     'Accept': 'application/vnd.github.v3+json'
                 },
-                body: JSON.stringify({
-                    message: `📝 Добавлена заявка #${newApplication.id} от ${applicationData.firstName}`,
-                    content: content,
-                    sha: sha,
-                    branch: branch
-                })
+                body: JSON.stringify(updateData)
             });
+            
+            console.log('📊 PUT статус:', updateResponse.status, updateResponse.statusText);
             
             if (!updateResponse.ok) {
                 const error = await updateResponse.json();
+                console.error('❌ Ошибка GitHub:', error);
                 throw new Error(`GitHub ошибка: ${error.message}`);
             }
             
-            console.log('✅ Заявка успешно сохранена в GitHub, ID:', newApplication.id);
-            return { success: true, id: newApplication.id };
+            const result = await updateResponse.json();
+            console.log('✅ Заявка успешно сохранена в GitHub!');
+            console.log('🔗 Коммит:', result.commit.html_url);
+            
+            return { success: true, id: newApplication.id, commit: result.commit.html_url };
             
         } catch (error) {
             console.error('❌ Ошибка сохранения в GitHub:', error);
+            console.error('📌 Стек ошибки:', error.stack);
             throw error;
         }
     }
@@ -597,6 +668,8 @@
             date: new Date().toISOString()
         };
         
+        console.log('📋 Данные формы:', formData);
+        
         // Валидация
         if (!formData.firstName || !formData.lastName || !formData.email || !formData.phone) {
             showMessage(messageEl, 'Пожалуйста, заполните все поля', 'error');
@@ -606,14 +679,26 @@
         // Сохраняем оригинальный текст кнопки
         const originalText = submitBtn.textContent;
         submitBtn.disabled = true;
-        submitBtn.textContent = 'Отправка в GitHub...';
+        submitBtn.textContent = 'Отправка...';
+        
+        // Скрываем предыдущее сообщение
+        messageEl.style.display = 'none';
         
         try {
+            console.log('🚀 Начинаем отправку в GitHub...');
+            
+            // Сначала тестируем подключение
+            const isConnected = await testGitHubConnection();
+            if (!isConnected) {
+                throw new Error('Нет подключения к GitHub. Проверьте токен и репозиторий.');
+            }
+            
             // Сохраняем в GitHub
             const result = await saveToGitHub(formData);
             
             // Показываем успех
             showMessage(messageEl, `✅ Заявка #${result.id} успешно отправлена!`, 'success');
+            console.log('🎉 Заявка успешно отправлена!');
             
             // Сброс формы
             form.reset();
@@ -622,27 +707,35 @@
             saveToLocalBackup(formData, result.id);
             
         } catch (error) {
-            console.error('Ошибка отправки:', error);
-            showMessage(messageEl, '❌ Ошибка отправки. Проверьте консоль.', 'error');
+            console.error('💥 Ошибка отправки:', error);
+            
+            // Подробное сообщение об ошибке
+            let errorMessage = 'Ошибка отправки. ';
+            
+            if (error.message.includes('401')) {
+                errorMessage += 'Ошибка аутентификации. Проверьте GitHub токен.';
+            } else if (error.message.includes('403')) {
+                errorMessage += 'Доступ запрещен. Проверьте права токена.';
+            } else if (error.message.includes('404')) {
+                errorMessage += 'Репозиторий не найден. Проверьте название.';
+            } else if (error.message.includes('network')) {
+                errorMessage += 'Проблема с сетью. Проверьте подключение.';
+            } else {
+                errorMessage += error.message;
+            }
+            
+            showMessage(messageEl, `❌ ${errorMessage}`, 'error');
             
             // Резервное сохранение в LocalStorage
             const backupId = 'backup_' + Date.now();
             saveToLocalBackup(formData, backupId);
             
-            // Показываем резервный успех
-            setTimeout(() => {
-                showMessage(messageEl, `⚠️ Сохранено локально (ID: ${backupId})`, 'success');
-            }, 2000);
+            console.log('💾 Создана резервная копия, ID:', backupId);
             
         } finally {
             // Восстанавливаем кнопку
             submitBtn.disabled = false;
             submitBtn.textContent = originalText;
-            
-            // Автоскрытие сообщения
-            setTimeout(() => {
-                messageEl.style.display = 'none';
-            }, 5000);
         }
     }
     
@@ -653,13 +746,13 @@
         
         if (type === 'success') {
             element.classList.add('success');
-            element.style.display = 'block';
         } else if (type === 'error') {
             element.style.backgroundColor = 'rgba(248,215,218,0.9)';
             element.style.color = '#721c24';
             element.style.border = '1px solid rgba(245,198,203,0.5)';
-            element.style.display = 'block';
         }
+        
+        element.style.display = 'block';
     }
     
     // Локальное резервное копирование
@@ -760,6 +853,8 @@
 
     // Основная инициализация
     (async()=>{
+        console.log('🚀 Инициализация сайта...');
+        
         const config=await loadConfig();
         applyConfig(config);
         updateCalculator();
@@ -769,9 +864,23 @@
             initStableParticles();
         }, 500);
         
-        // Проверка настроек GitHub
-        console.log('🔧 GitHub настройки:', GITHUB_REPO);
-        console.log('✅ Токен разделен на', GITHUB_TOKEN_PARTS.length, 'частей');
+        // Проверка настроек GitHub при загрузке
+        console.log('🔧 Проверка GitHub настроек...');
+        console.log('📁 Репозиторий:', GITHUB_REPO.owner + '/' + GITHUB_REPO.repo);
+        console.log('📄 Файл:', GITHUB_REPO.path);
+        console.log('🌿 Ветка:', GITHUB_REPO.branch);
+        
+        // Тестируем подключение
+        setTimeout(async () => {
+            console.log('🔍 Тестируем подключение к GitHub...');
+            const isConnected = await testGitHubConnection();
+            if (isConnected) {
+                console.log('✅ GitHub подключение готово!');
+            } else {
+                console.warn('⚠️ Проблема с подключением к GitHub');
+            }
+        }, 1000);
+        
     })();
     </script>
 

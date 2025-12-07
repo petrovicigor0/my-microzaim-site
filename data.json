@@ -1,6 +1,20 @@
 {
-  "applications": [],
-  "last_updated": "2025-12-07T23:34:49.902Z",
-  "total_count": 5,
+  "applications": [
+    {
+      "id": 1765151526073,
+      "timestamp": "2025-12-07T23:52:06.073Z",
+      "lastName": "Pupkin",
+      "firstName": "Vsia",
+      "email": "nikolajskacko@gmail.com",
+      "phone": "+37377841853",
+      "amount": 10000,
+      "days": 30,
+      "total": "11 500 UAH",
+      "currency": "UAH",
+      "status": "новая"
+    }
+  ],
+  "last_updated": "2025-12-07T23:52:06.073Z",
+  "total_count": 1,
   "lastUpdated": 1765151503787
 }

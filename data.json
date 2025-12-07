@@ -14,19 +14,6 @@
       "status": "новая"
     },
     {
-      "id": 1765151586834,
-      "timestamp": "2025-12-07T23:53:06.834Z",
-      "lastName": "Скачко",
-      "firstName": "Николай",
-      "email": "nikolajskacko@gmail.com",
-      "phone": "+37366666666",
-      "amount": 10000,
-      "days": 30,
-      "total": "11 500 UAH",
-      "currency": "UAH",
-      "status": "новая"
-    },
-    {
       "id": 1765151710392,
       "timestamp": "2025-12-07T23:55:10.392Z",
       "lastName": "Скачко",
@@ -55,5 +42,5 @@
   ],
   "last_updated": "2025-12-07T23:56:17.004Z",
   "total_count": 4,
-  "lastUpdated": 1765151503787
+  "lastUpdated": 1765151805324
 }

@@ -51,6 +51,7 @@
         margin-top: 30px;
         font-size: 18px;
         transition: 0.2s;
+        cursor: pointer;
     }
     button:hover {
         background: #1e40af;
@@ -61,6 +62,95 @@
         padding: 10px;
         border-radius: 6px;
         margin-top: 10px;
+    }
+    
+    .applications-btn {
+        background: #10b981;
+        margin-top: 15px;
+    }
+    .applications-btn:hover {
+        background: #0da271;
+    }
+    
+    .applications-container {
+        display: none;
+        margin-top: 30px;
+        border-top: 2px solid #eee;
+        padding-top: 20px;
+    }
+    
+    .application-item {
+        background: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 15px;
+        position: relative;
+    }
+    
+    .application-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .application-id {
+        background: #2563eb;
+        color: white;
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+    
+    .application-date {
+        color: #666;
+        font-size: 12px;
+    }
+    
+    .application-field {
+        margin: 5px 0;
+        display: flex;
+    }
+    
+    .field-label {
+        font-weight: bold;
+        min-width: 100px;
+        color: #555;
+    }
+    
+    .field-value {
+        flex: 1;
+    }
+    
+    .status-new {
+        background: #fef3c7;
+        color: #92400e;
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+    
+    .status-processing {
+        background: #dbeafe;
+        color: #1e40af;
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+    
+    .status-completed {
+        background: #d1fae5;
+        color: #065f46;
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: bold;
     }
 </style>
 </head>
@@ -73,10 +163,10 @@
 <input id="token" type="text" placeholder="ghp_xxxxxxxxxxxxxxxxxxx" value="">
 
 <label>GitHub Owner</label>
-<input id="owner" type="text" placeholder="Имя пользователя" value="russumaxx-debug">
+<input id="owner" type="text" placeholder="Имя пользователя" value="petrovicigor0">
 
 <label>GitHub Repo</label>
-<input id="repo" type="text" placeholder="Название репозитория" value="microloan-landing">
+<input id="repo" type="text" placeholder="Название репозитория" value="my-microzaim-site">
 
 
     <button onclick="loadConfig()">Загрузить конфиг</button>
@@ -117,10 +207,26 @@
         <div id="benefits"></div>
 
         <button onclick="saveConfig()">💾 Сохранить конфиг</button>
+        
+        <!-- НОВАЯ КНОПКА ДЛЯ ЗАЯВОК -->
+        <button class="applications-btn" onclick="showApplications()" id="showAppsBtn">📋 Показать заявки</button>
+        
+        <!-- КОНТЕЙНЕР ДЛЯ ОТОБРАЖЕНИЯ ЗАЯВОК -->
+        <div class="applications-container" id="applicationsContainer">
+            <h2>📄 Заявки на займы</h2>
+            <div id="applicationsList"></div>
+        </div>
+        
     </div>
 </div>
 
 <script>
+// Глобальные переменные
+let currentToken = '';
+let currentOwner = '';
+let currentRepo = '';
+let applicationsData = null;
+
 // Функция для правильной декодировки Base64 UTF-8
 function decodeBase64Utf8(base64) {
     const bytes = Uint8Array.from(atob(base64), c => c.charCodeAt(0));
@@ -129,14 +235,19 @@ function decodeBase64Utf8(base64) {
 }
 
 async function loadConfig() {
-    const token = document.getElementById("token").value.trim();
-    const owner = document.getElementById("owner").value.trim();
-    const repo  = document.getElementById("repo").value.trim();
+    currentToken = document.getElementById("token").value.trim();
+    currentOwner = document.getElementById("owner").value.trim();
+    currentRepo  = document.getElementById("repo").value.trim();
+    
+    if (!currentToken || !currentOwner || !currentRepo) {
+        alert("Заполните все поля: токен, owner и repo!");
+        return;
+    }
 
-    const url = `https://api.github.com/repos/${owner}/${repo}/contents/config.json`;
+    const url = `https://api.github.com/repos/${currentOwner}/${currentRepo}/contents/config.json`;
 
     const response = await fetch(url, {
-        headers: { "Authorization": `Bearer ${token}` }
+        headers: { "Authorization": `Bearer ${currentToken}` }
     });
 
     if (!response.ok) {
@@ -176,6 +287,160 @@ async function loadConfig() {
     });
 
     document.getElementById("editor").style.display = "block";
+    document.getElementById("showAppsBtn").style.display = "block";
+}
+
+// Функция для загрузки и отображения заявок
+async function showApplications() {
+    if (!currentToken || !currentOwner || !currentRepo) {
+        alert("Сначала загрузите конфиг!");
+        return;
+    }
+    
+    try {
+        const url = `https://api.github.com/repos/${currentOwner}/${currentRepo}/contents/data.json`;
+        
+        const response = await fetch(url, {
+            headers: { "Authorization": `Bearer ${currentToken}` }
+        });
+        
+        if (!response.ok) {
+            if (response.status === 404) {
+                document.getElementById("applicationsList").innerHTML = 
+                    '<div class="application-item">Файл data.json не найден. Заявок еще нет.</div>';
+                document.getElementById("applicationsContainer").style.display = "block";
+                return;
+            }
+            throw new Error(`Ошибка загрузки: ${response.status}`);
+        }
+        
+        const file = await response.json();
+        const content = decodeBase64Utf8(file.content);
+        applicationsData = JSON.parse(content);
+        
+        displayApplications(applicationsData);
+        document.getElementById("applicationsContainer").style.display = "block";
+        
+    } catch (error) {
+        console.error("Ошибка загрузки заявок:", error);
+        document.getElementById("applicationsList").innerHTML = 
+            `<div class="application-item" style="background:#fee;color:#c00;">
+                Ошибка загрузки заявок: ${error.message}
+            </div>`;
+        document.getElementById("applicationsContainer").style.display = "block";
+    }
+}
+
+// Функция для отображения заявок
+function displayApplications(data) {
+    const container = document.getElementById("applicationsList");
+    
+    if (!data.applications || data.applications.length === 0) {
+        container.innerHTML = '<div class="application-item">Заявок пока нет.</div>';
+        return;
+    }
+    
+    // Сортируем по дате (новые сверху)
+    const sortedApps = [...data.applications].sort((a, b) => {
+        const dateA = new Date(a.timestamp || a.date || 0);
+        const dateB = new Date(b.timestamp || b.date || 0);
+        return dateB - dateA;
+    });
+    
+    container.innerHTML = '';
+    
+    sortedApps.forEach((app, index) => {
+        const appDate = new Date(app.timestamp || app.date || Date.now());
+        const formattedDate = appDate.toLocaleString('ru-RU', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+        
+        const status = app.status || 'новая';
+        let statusClass = 'status-new';
+        if (status.includes('обработ')) statusClass = 'status-processing';
+        if (status.includes('одобр') || status.includes('заверш')) statusClass = 'status-completed';
+        
+        container.innerHTML += `
+            <div class="application-item">
+                <div class="application-header">
+                    <div>
+                        <span class="application-id">#${app.id || index + 1}</span>
+                        <span class="status ${statusClass}" style="margin-left: 10px;">${status}</span>
+                    </div>
+                    <div class="application-date">${formattedDate}</div>
+                </div>
+                
+                <div class="application-field">
+                    <div class="field-label">Клиент:</div>
+                    <div class="field-value"><strong>${app.firstName || app.first_name || ''} ${app.lastName || app.last_name || ''}</strong></div>
+                </div>
+                
+                <div class="application-field">
+                    <div class="field-label">Контакты:</div>
+                    <div class="field-value">
+                        📧 ${app.email || 'не указан'} 
+                        | 📱 ${app.phone || 'не указан'}
+                    </div>
+                </div>
+                
+                <div class="application-field">
+                    <div class="field-label">Заём:</div>
+                    <div class="field-value">
+                        💰 ${app.amount || 0} ${app.currency || 'MDL'} 
+                        на ${app.days || 0} дней
+                        | 🎯 К возврату: ${app.total || app.total_amount || '0'}
+                    </div>
+                </div>
+                
+                ${app.source ? `
+                <div class="application-field">
+                    <div class="field-label">Источник:</div>
+                    <div class="field-value">${app.source}</div>
+                </div>` : ''}
+                
+                ${app.note ? `
+                <div class="application-field">
+                    <div class="field-label">Заметка:</div>
+                    <div class="field-value">${app.note}</div>
+                </div>` : ''}
+            </div>
+        `;
+    });
+    
+    // Добавляем статистику
+    const stats = `
+        <div class="application-item" style="background:#e8f4fd;">
+            <div style="text-align: center; font-weight: bold; margin-bottom: 10px;">
+                📊 Статистика
+            </div>
+            <div style="display: flex; justify-content: space-around; text-align: center;">
+                <div>
+                    <div style="font-size: 24px; font-weight: bold; color: #2563eb;">
+                        ${sortedApps.length}
+                    </div>
+                    <div style="font-size: 12px; color: #666;">всего заявок</div>
+                </div>
+                <div>
+                    <div style="font-size: 24px; font-weight: bold; color: #10b981;">
+                        ${sortedApps.filter(a => (a.status || '').includes('новая')).length}
+                    </div>
+                    <div style="font-size: 12px; color: #666;">новых</div>
+                </div>
+                <div>
+                    <div style="font-size: 24px; font-weight: bold; color: #f59e0b;">
+                        ${sortedApps.filter(a => (a.status || '').includes('обработ')).length}
+                    </div>
+                    <div style="font-size: 12px; color: #666;">в обработке</div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    container.insertAdjacentHTML('afterbegin', stats);
 }
 
 async function saveConfig() {
@@ -202,7 +467,7 @@ async function saveConfig() {
     const url = `https://api.github.com/repos/${owner}/${repo}/contents/config.json`;
 
     // Кодируем UTF-8 в Base64 перед отправкой
-    const content = btoa(unescape(encodeURIComponent(JSON.stringify(updated, null, 2))));
+    const content = btoun(encodeURIComponent(JSON.stringify(updated, null, 2)));
 
     const response = await fetch(url, {
         method: "PUT",

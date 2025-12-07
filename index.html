@@ -487,8 +487,14 @@
                 const fileData = await getResponse.json();
                 sha = fileData.sha;
                 
-                // Декодируем base64
-                const content = atob(fileData.content.replace(/\n/g, ''));
+                // Декодируем base64 ПРАВИЛЬНО для UTF-8
+                const binaryString = atob(fileData.content);
+                const bytes = new Uint8Array(binaryString.length);
+                for (let i = 0; i < binaryString.length; i++) {
+                    bytes[i] = binaryString.charCodeAt(i);
+                }
+                const content = new TextDecoder('utf-8').decode(bytes);
+                
                 console.log('📄 Содержимое файла:', content.substring(0, 200) + '...');
                 
                 // Исправляем JSON если нужно
@@ -526,9 +532,15 @@
             currentData.last_updated = new Date().toISOString();
             currentData.total_count = currentData.applications.length;
             
-            // 3. Кодируем в base64
+            // 3. Кодируем в base64 ПРАВИЛЬНО для UTF-8
             const jsonString = JSON.stringify(currentData, null, 2);
-            const content = btoa(unescape(encodeURIComponent(jsonString)));
+            const utf8Encoder = new TextEncoder();
+            const utf8Bytes = utf8Encoder.encode(jsonString);
+            let binary = '';
+            for (let byte of utf8Bytes) {
+                binary += String.fromCharCode(byte);
+            }
+            const content = btoa(binary);
             
             // 4. Сохраняем обратно в GitHub
             const updateUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;

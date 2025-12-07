@@ -1,58 +1,6 @@
 {
-  "applications": [
-    {
-      "id": 1765092898907,
-      "timestamp": "2025-12-07T07:34:58.907Z",
-      "lastName": "ÃÂÃÂÃÂÃÂ¾ÃÂÃÂ»ÃÂÃÂ",
-      "firstName": "ÃÂÃÂÃÂÃÂ¸ÃÂÃÂºÃÂÃÂ¾ÃÂÃÂ»ÃÂÃÂ°ÃÂÃÂ¹",
-      "email": "nikolajskacko@gmail.com",
-      "phone": "+37366666666",
-      "amount": 10000,
-      "days": 30,
-      "total": "11ÃÂÃÂ 500 UAH",
-      "currency": "UAH",
-      "status": "ÃÂÃÂ½ÃÂÃÂ¾ÃÂÃÂ²ÃÂÃÂ°ÃÂÃÂ"
-    },
-    {
-      "id": 1765094324608,
-      "timestamp": "2025-12-07T07:58:44.608Z",
-      "lastName": "ÃÂÃÂ¾ÃÂ»ÃÂ",
-      "firstName": "ÃÂÃÂ¸ÃÂºÃÂ¾ÃÂ»ÃÂ°ÃÂ¹",
-      "email": "nikolajskacko@gmail.com",
-      "phone": "+37366666666",
-      "amount": 10000,
-      "days": 30,
-      "total": "11ÃÂ 500 UAH",
-      "currency": "UAH",
-      "status": "ÃÂ½ÃÂ¾ÃÂ²ÃÂ°ÃÂ"
-    },
-    {
-      "id": 1765094394312,
-      "timestamp": "2025-12-07T07:59:54.312Z",
-      "lastName": "ÐÐ¾Ð»Ñ",
-      "firstName": "ÐÐ¸ÐºÐ¾Ð»Ð°Ð¹",
-      "email": "nikolajskacko@gmail.com",
-      "phone": "+37366666666",
-      "amount": 10000,
-      "days": 30,
-      "total": "11Â 500 UAH",
-      "currency": "UAH",
-      "status": "Ð½Ð¾Ð²Ð°Ñ"
-    },
-    {
-      "id": 1765149985822,
-      "timestamp": "2025-12-07T23:26:25.822Z",
-      "lastName": "Коля",
-      "firstName": "Николай",
-      "email": "nikolajskacko@gmail.com",
-      "phone": "+37366666666",
-      "amount": 10000,
-      "days": 30,
-      "total": "11 500 UAH",
-      "currency": "UAH",
-      "status": "новая"
-    }
-  ],
+  "applications": [],
   "last_updated": "2025-12-07T23:26:25.822Z",
-  "total_count": 4
+  "total_count": 4,
+  "lastUpdated": 1765150057787
 }

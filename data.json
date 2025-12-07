@@ -1,46 +1,6 @@
 {
-  "applications": [
-    {
-      "id": 1765151526073,
-      "timestamp": "2025-12-07T23:52:06.073Z",
-      "lastName": "Pupkin",
-      "firstName": "Vsia",
-      "email": "nikolajskacko@gmail.com",
-      "phone": "+37377841853",
-      "amount": 10000,
-      "days": 30,
-      "total": "11 500 UAH",
-      "currency": "UAH",
-      "status": "новая"
-    },
-    {
-      "id": 1765151710392,
-      "timestamp": "2025-12-07T23:55:10.392Z",
-      "lastName": "Скачко",
-      "firstName": "Николай",
-      "email": "nikolajskacko@gmail.com",
-      "phone": "+37366666666",
-      "amount": 10000,
-      "days": 30,
-      "total": "11 500 UAH",
-      "currency": "UAH",
-      "status": "новая"
-    },
-    {
-      "id": 1765151777004,
-      "timestamp": "2025-12-07T23:56:17.004Z",
-      "lastName": "Pupkin",
-      "firstName": "Vsia",
-      "email": "nikolajskacko@gmail.com",
-      "phone": "+37377841853",
-      "amount": 10000,
-      "days": 30,
-      "total": "11 500 UAH",
-      "currency": "UAH",
-      "status": "новая"
-    }
-  ],
+  "applications": [],
   "last_updated": "2025-12-07T23:56:17.004Z",
   "total_count": 4,
-  "lastUpdated": 1765151805324
+  "lastUpdated": 1765151816745
 }

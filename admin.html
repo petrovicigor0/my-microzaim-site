@@ -152,6 +152,38 @@
         font-size: 12px;
         font-weight: bold;
     }
+    
+    .application-actions {
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px dashed #ddd;
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+    }
+    
+    .delete-btn {
+        background: #ef4444;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 12px;
+        cursor: pointer;
+    }
+    
+    .delete-btn:hover {
+        background: #dc2626;
+    }
+    
+    .clear-all-btn {
+        background: #f59e0b;
+        margin-top: 10px;
+    }
+    
+    .clear-all-btn:hover {
+        background: #d97706;
+    }
 </style>
 </head>
 
@@ -214,6 +246,15 @@
         <!-- КОНТЕЙНЕР ДЛЯ ОТОБРАЖЕНИЯ ЗАЯВОК -->
         <div class="applications-container" id="applicationsContainer">
             <h2>📄 Заявки на займы</h2>
+            
+            <!-- Кнопки управления -->
+            <div style="margin-bottom: 20px; display: flex; gap: 10px;">
+                <button onclick="showApplications()" style="padding: 8px 15px; flex: 1;">🔄 Обновить</button>
+                <button onclick="clearAllApplications()" class="clear-all-btn" style="padding: 8px 15px; flex: 1;">
+                    🗑️ Очистить все заявки
+                </button>
+            </div>
+            
             <div id="applicationsList"></div>
         </div>
         
@@ -226,12 +267,18 @@ let currentToken = '';
 let currentOwner = '';
 let currentRepo = '';
 let applicationsData = null;
+let currentDataSha = '';
 
 // Функция для правильной декодировки Base64 UTF-8
 function decodeBase64Utf8(base64) {
     const bytes = Uint8Array.from(atob(base64), c => c.charCodeAt(0));
     const decoder = new TextDecoder('utf-8');
     return decoder.decode(bytes);
+}
+
+// Функция для кодирования в Base64
+function encodeToBase64(str) {
+    return btoa(unescape(encodeURIComponent(str)));
 }
 
 async function loadConfig() {
@@ -315,6 +362,7 @@ async function showApplications() {
         }
         
         const file = await response.json();
+        currentDataSha = file.sha; // Сохраняем SHA для последующего обновления
         const content = decodeBase64Utf8(file.content);
         applicationsData = JSON.parse(content);
         
@@ -364,8 +412,11 @@ function displayApplications(data) {
         if (status.includes('обработ')) statusClass = 'status-processing';
         if (status.includes('одобр') || status.includes('заверш')) statusClass = 'status-completed';
         
+        // Создаем уникальный ID для заявки
+        const appId = app.id || index;
+        
         container.innerHTML += `
-            <div class="application-item">
+            <div class="application-item" id="app-${appId}">
                 <div class="application-header">
                     <div>
                         <span class="application-id">#${app.id || index + 1}</span>
@@ -407,6 +458,12 @@ function displayApplications(data) {
                     <div class="field-label">Заметка:</div>
                     <div class="field-value">${app.note}</div>
                 </div>` : ''}
+                
+                <div class="application-actions">
+                    <button class="delete-btn" onclick="deleteApplication(${appId})">
+                        🗑️ Удалить эту заявку
+                    </button>
+                </div>
             </div>
         `;
     });
@@ -443,6 +500,126 @@ function displayApplications(data) {
     container.insertAdjacentHTML('afterbegin', stats);
 }
 
+// Функция удаления одной заявки
+async function deleteApplication(appIdToDelete) {
+    if (!applicationsData || !applicationsData.applications) {
+        alert("Нет данных для удаления!");
+        return;
+    }
+    
+    if (!confirm("Вы уверены, что хотите удалить эту заявку?")) {
+        return;
+    }
+    
+    try {
+        // Находим индекс заявки
+        const appIndex = applicationsData.applications.findIndex(app => 
+            (app.id && app.id == appIdToDelete) || 
+            applicationsData.applications.indexOf(app) == appIdToDelete
+        );
+        
+        if (appIndex === -1) {
+            alert("Заявка не найдена!");
+            return;
+        }
+        
+        // Удаляем заявку из массива
+        const deletedApp = applicationsData.applications.splice(appIndex, 1)[0];
+        console.log("Удалена заявка:", deletedApp);
+        
+        // Сохраняем обновленные данные
+        await saveApplicationsData();
+        
+        // Обновляем отображение
+        displayApplications(applicationsData);
+        
+        alert("✅ Заявка успешно удалена!");
+        
+    } catch (error) {
+        console.error("Ошибка при удалении заявки:", error);
+        alert("❌ Ошибка при удалении: " + error.message);
+    }
+}
+
+// Функция очистки всех заявок
+async function clearAllApplications() {
+    if (!applicationsData || !applicationsData.applications || applicationsData.applications.length === 0) {
+        alert("Нет заявок для очистки!");
+        return;
+    }
+    
+    if (!confirm(`Вы уверены, что хотите удалить ВСЕ заявки (${applicationsData.applications.length} шт.)? Это действие нельзя отменить!`)) {
+        return;
+    }
+    
+    try {
+        // Создаем пустой массив заявок
+        applicationsData.applications = [];
+        applicationsData.lastUpdated = Date.now();
+        
+        // Сохраняем изменения
+        await saveApplicationsData();
+        
+        // Обновляем отображение
+        displayApplications(applicationsData);
+        
+        alert(`✅ Все заявки успешно удалены!`);
+        
+    } catch (error) {
+        console.error("Ошибка при очистке заявок:", error);
+        alert("❌ Ошибка при очистке: " + error.message);
+    }
+}
+
+// Функция сохранения данных заявок в GitHub
+async function saveApplicationsData() {
+    if (!currentToken || !currentOwner || !currentRepo) {
+        throw new Error("Не заданы параметры подключения к GitHub");
+    }
+    
+    if (!applicationsData) {
+        throw new Error("Нет данных для сохранения");
+    }
+    
+    const url = `https://api.github.com/repos/${currentOwner}/${currentRepo}/contents/data.json`;
+    
+    // Подготавливаем данные
+    const dataToSave = {
+        ...applicationsData,
+        lastUpdated: Date.now()
+    };
+    
+    // Конвертируем в JSON и кодируем в Base64
+    const jsonString = JSON.stringify(dataToSave, null, 2);
+    const encodedContent = encodeToBase64(jsonString);
+    
+    const response = await fetch(url, {
+        method: "PUT",
+        headers: {
+            "Authorization": `Bearer ${currentToken}`,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            message: applicationsData.applications.length === 0 ? 
+                "Очистка всех заявок" : 
+                `Обновление данных (осталось ${applicationsData.applications.length} заявок)`,
+            content: encodedContent,
+            sha: currentDataSha // Используем сохраненный SHA
+        })
+    });
+    
+    if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || "Ошибка сохранения");
+    }
+    
+    // Обновляем SHA после успешного сохранения
+    const result = await response.json();
+    currentDataSha = result.content.sha;
+    
+    return true;
+}
+
 async function saveConfig() {
     const token = document.getElementById("token").value.trim();
     const owner = document.getElementById("owner").value.trim();
@@ -467,7 +644,7 @@ async function saveConfig() {
     const url = `https://api.github.com/repos/${owner}/${repo}/contents/config.json`;
 
     // Кодируем UTF-8 в Base64 перед отправкой
-    const content = btoun(encodeURIComponent(JSON.stringify(updated, null, 2)));
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(updated, null, 2))));
 
     const response = await fetch(url, {
         method: "PUT",

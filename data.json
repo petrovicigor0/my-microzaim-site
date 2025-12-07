@@ -1,20 +1,6 @@
 {
-  "applications": [
-    {
-      "id": 1765150103949,
-      "timestamp": "2025-12-07T23:28:23.949Z",
-      "lastName": "Коля",
-      "firstName": "Николай",
-      "email": "nikolajskacko@gmail.com",
-      "phone": "+37366666666",
-      "amount": 10000,
-      "days": 30,
-      "total": "11 500 UAH",
-      "currency": "UAH",
-      "status": "новая"
-    }
-  ],
+  "applications": [],
   "last_updated": "2025-12-07T23:28:23.949Z",
   "total_count": 1,
-  "lastUpdated": 1765150057787
+  "lastUpdated": 1765150166011
 }

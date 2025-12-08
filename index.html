@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>МикроЗайм - Быстрые займы онлайн</title>
 <style>
-    /* ВАШ CSS КОД (полностью без изменений) */
+    /* полностью без изменений) */
     :root {
         --primary-color: #667eea;
         --secondary-color: #764ba2;
@@ -577,7 +577,6 @@
         }
     }
     
-    // ================ ВАШ СУЩЕСТВУЮЩИЙ КОД ================
     let currency = "MDL"; // дефолт
 
     async function loadConfig() {
@@ -721,7 +720,7 @@
             
         } catch (error) {
             console.error('❌ Ошибка отправки:', error);
-            showMessage(messageEl, '❌ Ошибка отправки. Попробуйте еще раз.', 'error');
+            showMessage(messageEl, '❌ Ошибка отправки. Попробуйте еще раз или перезагрузите страницу.', 'error');
             
             // Резервное сохранение в LocalStorage
             const backupId = 'backup_' + Date.now();
